@@ -7,8 +7,8 @@ import { Heading, Text } from "../ui";
 const contactMethods = [
   {
     title: "Email",
-    value: "rakib@example.com",
-    href: links.email,
+    value: "rakibislam4913@gmail.com",
+    href: `mailto:${links.email}`,
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -71,7 +71,7 @@ export function Contact() {
                 <label className="text-sm font-medium text-[var(--foreground)]">Name</label>
                 <input
                   required
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                   className="w-full rounded-xl bg-[var(--background)] border border-[var(--card-border)] px-4 py-3.5 text-[var(--foreground)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] focus:outline-none transition-all"
                 />
               </div>
@@ -80,7 +80,7 @@ export function Contact() {
                 <input
                   type="email"
                   required
-                  placeholder="john@example.com"
+                  placeholder="Enter your email"
                   className="w-full rounded-xl bg-[var(--background)] border border-[var(--card-border)] px-4 py-3.5 text-[var(--foreground)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] focus:outline-none transition-all"
                 />
               </div>

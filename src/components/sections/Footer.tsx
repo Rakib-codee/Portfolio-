@@ -29,13 +29,10 @@ export function Footer() {
           <div className="space-y-4">
             <motion.a
               href="#hero"
-              className="text-xl font-bold text-[var(--foreground)] flex items-center gap-2"
+              className="inline-block"
               whileHover={{ scale: 1.02 }}
             >
-              <span className="w-8 h-8 rounded-lg bg-linear-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-sm text-black font-bold">
-                MR
-              </span>
-              <span>Rakib</span>
+              <p className="font-[family-name:var(--font-space-grotesk)] text-xl tracking-wide font-extrabold">Mahfujur <span className="text-orange-500">Rahman</span></p>
             </motion.a>
             <p className="text-[var(--muted)] text-sm leading-relaxed max-w-xs">
               Full Stack Developer & Designer crafting beautiful, performant web experiences.

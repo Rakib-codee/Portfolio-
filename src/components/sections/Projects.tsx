@@ -54,7 +54,7 @@ export function Projects() {
 
       {/* Category Filter */}
       <motion.div 
-        className="flex flex-wrap justify-center w-min-30 h-[20px] gap-4 pb-28 mb-17"
+        className="flex flex-wrap justify-center gap-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -63,7 +63,7 @@ export function Projects() {
           <button
             key={cat.id}
             onClick={() => handleCategoryChange(cat.id)}
-            className={`px-10 py-4 rounded-full text-base font-semibold transition-all ${
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
               activeCategory === cat.id
                 ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
                 : "bg-[var(--card)] text-[var(--muted)] border border-[var(--card-border)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
@@ -75,7 +75,7 @@ export function Projects() {
       </motion.div>
 
       {/* Projects Grid */}
-      <div className="grid gap-y-18 gap-x-10 md:grid-cols-2 mt-[22px]">
+      <div className="grid gap-6 md:grid-cols-2">
         <AnimatePresence mode="popLayout">
           {paginatedProjects.map((project, index) => (
             <motion.div
@@ -291,14 +291,6 @@ export function Projects() {
           Showing {startIndex + 1}-{Math.min(startIndex + PROJECTS_PER_PAGE, filteredProjects.length)} of {filteredProjects.length} projects
         </p>
       )}
-      {/* View All Projects CTA */}
-      <motion.div
-        className="text-center pt-32 mt-16"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-      </motion.div>
     </div>
   );
 }

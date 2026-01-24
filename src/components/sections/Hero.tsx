@@ -169,7 +169,7 @@ export function Hero() {
           transition={{ delay: 0.9 }}
         >
           <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">3+</p>
+            <p className="text-2xl font-bold text-[var(--foreground)]">2+</p>
             <p className="text-sm text-[var(--muted)]">Years Experience</p>
           </div>
           <div>
@@ -208,7 +208,7 @@ export function Hero() {
             </svg>
           </a>
           <a
-            href={links.email}
+            href={`mailto:${links.email}`}
             className="p-3 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
             aria-label="Email"
           >

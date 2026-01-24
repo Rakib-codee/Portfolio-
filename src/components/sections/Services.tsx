@@ -33,9 +33,9 @@ const services = [
 	},
 	{
 		id: 2,
-		title: "UI/UX Design",
+		title: "Android Development",
 		description:
-			"Creating intuitive, beautiful interfaces with focus on user experience, accessibility, and modern aesthetics.",
+			"Building native Android applications with modern architecture, clean UI, and seamless user experiences.",
 		icon: (
 			<svg
 				className="w-8 h-8"
@@ -47,14 +47,36 @@ const services = [
 					strokeLinecap="round"
 					strokeLinejoin="round"
 					strokeWidth={1.5}
-					d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+					d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
 				/>
 			</svg>
 		),
-		features: ["Figma Design", "Prototyping", "Design Systems", "User Research"],
+		features: ["Java & Kotlin", "Android Studio", "Material Design", "REST APIs"],
 	},
 	{
 		id: 3,
+		title: "Python Development",
+		description:
+			"Developing robust Python applications, automation scripts, data analysis tools, and backend services.",
+		icon: (
+			<svg
+				className="w-8 h-8"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
+				<path
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth={1.5}
+					d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+				/>
+			</svg>
+		),
+		features: ["Django & Flask", "Data Analysis", "Automation", "Machine Learning"],
+	},
+	{
+		id: 4,
 		title: "Full-Stack Solutions",
 		description:
 			"End-to-end development from database design to deployment, ensuring scalable and maintainable applications.",
@@ -81,7 +103,7 @@ const services = [
 		],
 	},
 	{
-		id: 4,
+		id: 5,
 		title: "Performance & SEO",
 		description:
 			"Optimizing web applications for speed, search engines, and core web vitals to maximize reach and engagement.",
@@ -111,7 +133,7 @@ const services = [
 
 export function Services() {
 	return (
-		<div className="space-y-12 flex flex-col items-center">
+		<div className="space-y-5 flex flex-col items-center">
 			{/* Section Header */}
 			<div className="text-center space-y-4 w-full flex flex-col items-center">
 				<motion.span

@@ -5,9 +5,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
-  // Disable telemetry for faster builds
-  telemetry: {
-    disabled: true,
+  // Configure external images
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co',
+      },
+    ],
   },
   // Optimize compilation
   experimental: {

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Badge, Card, Heading, Text } from "../ui";
 import { skills } from "@/content/skills";
 import { education } from "@/content/education";
+import { links } from "@/content/links";
 
 const skillCategories = [
   {
@@ -202,7 +203,10 @@ export function About() {
 
           {/* Download Resume CTA */}
           <motion.a
-            href="#"
+            href={links.resume}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-8 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-medium hover:bg-cyan-500/20 transition-colors"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
