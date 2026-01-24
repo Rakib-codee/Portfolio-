@@ -66,7 +66,7 @@ export function Projects() {
             className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
               activeCategory === cat.id
                 ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
-                : "bg-[var(--card)] text-[var(--muted)] border border-[var(--card-border)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-[var(--accent)] hover:text-[var(--accent)]"
             }`}
           >
             {cat.label}

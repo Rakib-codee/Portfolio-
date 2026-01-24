@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Md Mahfujur Rahman Rakib - Full Stack Developer & Designer",
+  title: "Rakib - Full Stack Developer",
   description: "Professional portfolio showcasing projects, skills, and creative work. Specializing in Next.js, React, and modern web design.",
   keywords: "Full Stack Developer, Frontend Engineer, UI/UX Designer, Next.js, React, TypeScript",
   authors: [{ name: "Md Mahfujur Rahman Rakib" }],
@@ -48,9 +48,6 @@ export default function RootLayout({
         style={{ background: 'var(--background)', color: 'var(--foreground)' }}
       >
         {/* Skip to main content - Accessibility */}
-        <a href="#hero" className="skip-link">
-          Skip to main content
-        </a>
         <SoundProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </SoundProvider>
