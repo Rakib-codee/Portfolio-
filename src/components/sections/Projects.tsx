@@ -1,15 +1,42 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { projects } from "@/content/projects";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { projects, projectCategories } from "@/content/projects";
 import { Badge, Button, Heading, Text } from "../ui";
 
+const PROJECTS_PER_PAGE = 4;
+
 export function Projects() {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filteredProjects = activeCategory === "all" 
+    ? projects 
+    : projects.filter(p => p.category === activeCategory);
+
+  // Reset to page 1 when category changes
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    setCurrentPage(1);
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    setExpandedProject(null);
+  };
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 flex flex-col items-center">
       {/* Section Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 w-full flex flex-col items-center">
         <motion.span
           className="inline-block text-cyan-400 font-mono text-sm tracking-wider uppercase"
           initial={{ opacity: 0 }}
@@ -19,27 +46,55 @@ export function Projects() {
           My Recent Work
         </motion.span>
         <Heading level={2}>Featured Projects</Heading>
-        <Text muted className="max-w-2xl mx-auto">
-          A selection of projects that showcase my expertise in building modern, 
-          performant web applications with attention to detail.
+        <Text muted className="max-w-2xl text-center">
+          Real projects with real impact. Click any project to see the full story — 
+          the problem, my solution, and the measurable results.
         </Text>
       </div>
 
-      {/* Projects Grid */}
-      <div className="grid gap-8 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
+      {/* Category Filter */}
+      <motion.div 
+        className="flex flex-wrap justify-center w-min-30 h-[20px] gap-4 pb-28 mb-17"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        {projectCategories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => handleCategoryChange(cat.id)}
+            className={`px-10 py-4 rounded-full text-base font-semibold transition-all ${
+              activeCategory === cat.id
+                ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
+                : "bg-[var(--card)] text-[var(--muted)] border border-[var(--card-border)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            }`}
           >
+            {cat.label}
+          </button>
+        ))}
+      </motion.div>
+
+      {/* Projects Grid */}
+      <div className="grid gap-y-18 gap-x-10 md:grid-cols-2 mt-[22px]">
+        <AnimatePresence mode="popLayout">
+          {paginatedProjects.map((project, index) => (
             <motion.div
-              className="group relative bg-[var(--card)] border border-[var(--card-border)] rounded-2xl overflow-hidden h-full shadow-[var(--shadow)]"
-              whileHover={{ y: -8, borderColor: "rgba(6, 182, 212, 0.3)" }}
-              transition={{ duration: 0.3 }}
+              key={project.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
             >
+              <motion.div
+                className={`group relative bg-[var(--card)] border border-[var(--card-border)] rounded-2xl overflow-hidden h-full cursor-pointer ${
+                  expandedProject === project.id ? "ring-2 ring-cyan-500" : ""
+                }`}
+                style={{ boxShadow: "var(--shadow)" }}
+                whileHover={{ y: -8, borderColor: "rgba(6, 182, 212, 0.4)" }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+              >
               {/* Project Image */}
               <div className="relative h-56 overflow-hidden">
                 <motion.div
@@ -97,13 +152,60 @@ export function Projects() {
               {/* Project Info */}
               <div className="p-6 space-y-4">
                 <div>
-                  <Heading level={3} className="text-xl group-hover:text-cyan-400 transition-colors">
-                    {project.title}
-                  </Heading>
+                  <div className="flex items-center justify-between">
+                    <Heading level={3} className="text-xl group-hover:text-cyan-400 transition-colors">
+                      {project.title}
+                    </Heading>
+                    <motion.span
+                      animate={{ rotate: expandedProject === project.id ? 180 : 0 }}
+                      className="text-[var(--muted)]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </motion.span>
+                  </div>
                   <Text muted size="sm" className="mt-2 line-clamp-2">
                     {project.description}
                   </Text>
                 </div>
+
+                {/* Case Study - Expandable */}
+                <AnimatePresence>
+                  {expandedProject === project.id && project.caseStudy && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-4 mt-4 border-t border-[var(--card-border)] space-y-4">
+                        <div className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-bold">!</span>
+                          <div>
+                            <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-1">Problem</p>
+                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.problem}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm font-bold">→</span>
+                          <div>
+                            <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">Solution</p>
+                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.solution}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-bold">✓</span>
+                          <div>
+                            <p className="text-xs font-semibold text-green-400 uppercase tracking-wider mb-1">Result</p>
+                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.result}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2">
@@ -125,21 +227,77 @@ export function Projects() {
             </motion.div>
           </motion.div>
         ))}
+        </AnimatePresence>
       </div>
 
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <motion.div
+          className="flex items-center justify-center gap-2 pt-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          {/* Previous Button */}
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`p-2 rounded-lg border transition-all ${
+              currentPage === 1
+                ? "border-[var(--card-border)] text-[var(--muted)] cursor-not-allowed opacity-50"
+                : "border-[var(--card-border)] text-[var(--foreground)] hover:border-cyan-500 hover:text-cyan-500"
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Page Numbers */}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => goToPage(page)}
+              className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                currentPage === page
+                  ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
+                  : "bg-[var(--card)] text-[var(--muted)] border border-[var(--card-border)] hover:border-cyan-500 hover:text-cyan-500"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* Next Button */}
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`p-2 rounded-lg border transition-all ${
+              currentPage === totalPages
+                ? "border-[var(--card-border)] text-[var(--muted)] cursor-not-allowed opacity-50"
+                : "border-[var(--card-border)] text-[var(--foreground)] hover:border-cyan-500 hover:text-cyan-500"
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </motion.div>
+      )}
+
+      {/* Page Info */}
+      {totalPages > 1 && (
+        <p className="text-center text-sm text-[var(--muted)]">
+          Showing {startIndex + 1}-{Math.min(startIndex + PROJECTS_PER_PAGE, filteredProjects.length)} of {filteredProjects.length} projects
+        </p>
+      )}
       {/* View All Projects CTA */}
       <motion.div
-        className="text-center pt-8"
+        className="text-center pt-32 mt-16"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        <Button href="https://github.com" variant="secondary" size="lg">
-          View All Projects on GitHub
-          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Button>
       </motion.div>
     </div>
   );

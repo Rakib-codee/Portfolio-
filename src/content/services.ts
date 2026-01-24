@@ -7,21 +7,33 @@ export const services = [
   },
   {
     id: 2,
+    title: "Java Development",
+    description: "Enterprise-grade applications, REST APIs, and microservices with Spring Boot.",
+    tags: ["Java", "Spring Boot", "Hibernate", "Maven"],
+  },
+  {
+    id: 3,
+    title: "Python Development",
+    description: "Backend systems, automation scripts, data processing, and API development.",
+    tags: ["Python", "Django", "FastAPI", "Flask"],
+  },
+  {
+    id: 4,
+    title: "Full-Stack Development",
+    description: "End-to-end product delivery with modern APIs, authentication, and databases.",
+    tags: ["Node.js", "REST", "Supabase", "PostgreSQL"],
+  },
+  {
+    id: 5,
     title: "UI/UX Design",
     description: "Designing intuitive experiences with a focus on clarity, typography, and motion.",
     tags: ["Figma", "Prototyping", "Design Systems"],
   },
   {
-    id: 3,
-    title: "Full-Stack Development",
-    description: "End-to-end product delivery with modern APIs, authentication, and databases.",
-    tags: ["Node.js", "REST", "Supabase", "Prisma"],
-  },
-  {
-    id: 4,
-    title: "Performance Optimization",
-    description: "Improving Core Web Vitals, bundle size, and rendering performance.",
-    tags: ["Lighthouse", "Profiling", "Caching"],
+    id: 6,
+    title: "Database & DevOps",
+    description: "Database design, optimization, and deployment with Docker and cloud services.",
+    tags: ["PostgreSQL", "MySQL", "Docker", "AWS"],
   },
 ];
 

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SoundProvider } from "@/components/SoundProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -37,10 +44,16 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased overflow-x-hidden`}
         style={{ background: 'var(--background)', color: 'var(--foreground)' }}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        {/* Skip to main content - Accessibility */}
+        <a href="#hero" className="skip-link">
+          Skip to main content
+        </a>
+        <SoundProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </SoundProvider>
       </body>
     </html>
   );

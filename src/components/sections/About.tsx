@@ -8,30 +8,38 @@ import { education } from "@/content/education";
 const skillCategories = [
   {
     title: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    skills: ["React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS", "Framer Motion", "HTML5", "CSS3"],
   },
   {
     title: "Backend",
-    skills: ["Node.js", "Express", "Prisma", "PostgreSQL", "REST APIs"],
+    skills: ["Node.js", "Supabase", "Prisma", "MongoDB", "Firebase", "PostgreSQL", "MySQL"],
+  },
+  {
+    title: "Python",
+    skills: ["Python", "Django", "Flask", "FastAPI"],
+  },
+  {
+    title: "Java",
+    skills: ["Java", "Spring Boot"],
   },
   {
     title: "Tools & Design",
-    skills: ["Git", "Figma", "VS Code", "Vercel", "Docker"],
+    skills: ["Git", "Docker", "Figma", "Design Systems"],
   },
 ];
 
 const stats = [
-  { label: "Years Experience", value: "3+" },
-  { label: "Projects Completed", value: "25+" },
-  { label: "Happy Clients", value: "15+" },
+  { label: "Years Experience", value: "2+" },
+  { label: "Projects Completed", value: "24+" },
+  { label: "Happy Clients", value: "10+" },
   { label: "Technologies", value: "20+" },
 ];
 
 export function About() {
   return (
-    <div className="space-y-16">
+    <div className="flex flex-col items-center">
       {/* Section Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 w-full flex flex-col items-center mb-16">
         <motion.span
           className="inline-block text-cyan-400 font-mono text-sm tracking-wider uppercase"
           initial={{ opacity: 0 }}
@@ -45,59 +53,99 @@ export function About() {
 
       {/* Stats Row */}
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-4 gap-6"
+        className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-4xl mb-20"
         initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 6 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
       >
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
-            className="text-center p-6 rounded-2xl bg-[var(--card)] border border-[var(--card-border)] shadow-[var(--shadow)]"
+            className="text-center p-9 rounded-2xl bg-(--card) border border-(--card-border) shadow-(--shadow)"
             whileHover={{ y: -4, borderColor: "rgba(6, 182, 212, 0.3)" }}
             transition={{ duration: 0.2 }}
           >
-            <div className="text-3xl md:text-4xl font-bold text-[var(--accent)]">{stat.value}</div>
-            <div className="text-sm text-[var(--muted)] mt-1">{stat.label}</div>
+            <div className="text-3xl md:text-4xl font-bold text-(--accent)">
+              {stat.value}
+            </div>
+            <div className="text-sm text-(--muted) mt-1">{stat.label}</div>
           </motion.div>
         ))}
       </motion.div>
 
       {/* Main Content Grid */}
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2 mt-[20px]">
         {/* Bio Card */}
-        <Card className="h-full">
-          <div className="space-y-6">
+        <Card className="h-full ">
+          <div className="space-y-5">
             <div>
-              <Heading level={3} className="text-2xl mb-4">My Story</Heading>
+              <Heading level={3} className="text-2xl mb-2">
+                My Story
+              </Heading>
               <Text muted className="leading-relaxed">
-                I'm a passionate developer who bridges the gap between engineering excellence and thoughtful design. 
-                With a strong foundation in computer science and a keen eye for aesthetics, I create digital 
-                experiences that are both functional and beautiful.
+                I am Md Mahfujur Rahman Rakib, a dedicated Software Engineering
+                student with a passion for developing innovative and scalable
+                solutions. With a strong foundation in both backend and frontend
+                technologies, I specialize in React, Next.js, TypeScript,
+                MongoDB, Firebase, Java, Android development, and Python. My
+                diverse skill set enables me to approach projects from multiple
+                angles, ensuring both functionality and a seamless user
+                experience. I have had the opportunity to work on several
+                projects that showcase my ability to integrate modern
+                technologies and best practices. Whether it's building dynamic
+                web applications, optimizing databases, or developing mobile
+                solutions, I approach each challenge with a solution-driven
+                mindset and a commitment to excellence.
               </Text>
             </div>
-            
+
             <Text muted className="leading-relaxed">
-              I thrive in collaborative environments where I can learn from others and contribute my expertise. 
-              Whether it's building scalable web applications, crafting intuitive user interfaces, or optimizing 
-              performance, I approach every challenge with curiosity and dedication.
+              My goal is to bridge the gap between technical innovation and
+              user-friendly design. I thrive in collaborative environments and
+              am always eager to learn and contribute. With a blend of
+              creativity and technical expertise, I am confident in my ability
+              to deliver solutions that meet both business and user needs.
             </Text>
 
             {/* Education */}
-            <div className="pt-4 border-t border-[var(--card-border)]">
-              <Heading level={3} className="text-xl mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <div className="pt-4 border-t border-(--card-border)">
+              <Heading
+                level={3}
+                className="text-xl mb-4 flex items-center gap-2"
+              >
+                <svg
+                  className="w-5 h-5 text-(--accent)"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 14l9-5-9-5-9 5 9 5z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                  />
                 </svg>
                 Education
               </Heading>
               {education.map((edu) => (
                 <div key={edu.school} className="space-y-1">
-                  <Text className="font-semibold text-[var(--foreground)]">{edu.school}</Text>
-                  <Text muted size="sm">{edu.institution}</Text>
-                  <Text className="text-[var(--accent)]/80" size="sm">{edu.period}</Text>
+                  <Text className="font-semibold  text-(--foreground)">
+                    {edu.school}
+                  </Text>
+                  <Text className="text-2xl text-(--muted)" muted size="sm">
+                    {edu.institution}
+                  </Text>
+                  <Text className="text-(--accent)/80 text-2xl" size="sm">
+                    {edu.period}
+                  </Text>
                 </div>
               ))}
             </div>
@@ -107,12 +155,22 @@ export function About() {
         {/* Skills Card */}
         <Card className="h-full">
           <Heading level={3} className="text-2xl mb-6 flex items-center gap-2">
-            <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            <svg
+              className="w-5 h-5 text-cyan-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+              />
             </svg>
             Technical Skills
           </Heading>
-          
+
           <div className="space-y-6">
             {skillCategories.map((category, catIndex) => (
               <motion.div
@@ -149,8 +207,18 @@ export function About() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             Download Resume
           </motion.a>

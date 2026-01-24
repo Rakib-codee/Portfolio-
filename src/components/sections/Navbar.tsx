@@ -40,7 +40,7 @@ export function Navbar() {
     <>
       {/* Floating Navbar */}
       <motion.header
-        className="fixed top-4 left-0 right-0 z-50 flex justify-center px-10 pt-18"
+        className="fixed top-4 left-0 right-0 z-50 flex justify-center px-6 pt-5"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -48,8 +48,8 @@ export function Navbar() {
         <motion.nav
           className={`flex items-center gap-3 px-3 py-3 rounded-full border transition-all duration-500 ${
             isScrolled
-              ? "bg-[var(--card)]/80 backdrop-blur-xl border-[var(--card-border)] shadow-lg"
-              : "bg-[var(--card)]/50 backdrop-blur-md border-[var(--card-border)]/30"
+              ? "bg-(--card)/80 backdrop-blur-xl border-[var(--card-border)] shadow-lg"
+              : "bg-(--card)/50 backdrop-blur-md border-[var(--card-border)]/30"
           }`}
           layout
         >
@@ -60,15 +60,11 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span className="w-10 h-10 rounded-full bg-linear-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-base text-black font-bold">
-              MR
-            </span>
-            <span className="hidden sm:inline text-[var(--foreground)] font-semibold">Rakib</span>
+            <p className="font-[family-name:var(--font-space-grotesk)] text-lg tracking-wide font-extrabold">Mahfujur <span className="text-orange-500">Rahman</span></p>
           </motion.a>
 
           {/* Divider */}
           <div className="hidden md:block w-px h-8 bg-[var(--card-border)]" />
-
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-12">
             {navLinks.map((link) => (

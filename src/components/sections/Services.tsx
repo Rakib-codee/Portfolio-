@@ -111,9 +111,9 @@ const services = [
 
 export function Services() {
 	return (
-		<div className="space-y-12">
+		<div className="space-y-12 flex flex-col items-center">
 			{/* Section Header */}
-			<div className="text-center space-y-4">
+			<div className="text-center space-y-4 w-full flex flex-col items-center">
 				<motion.span
 					className="inline-block text-cyan-400 font-mono text-sm tracking-wider uppercase"
 					initial={{ opacity: 0 }}
@@ -123,10 +123,10 @@ export function Services() {
 					What I Offer
 				</motion.span>
 				<Heading level={2}>Services</Heading>
-				<Text muted className="max-w-2xl mx-auto">
+				<p className="max-w-2xl text-center text-[var(--muted)]">
 					I provide comprehensive web development services, from initial concept
 					to final deployment, ensuring high-quality results at every stage.
-				</Text>
+				</p>
 			</div>
 
 			{/* Services Grid */}
@@ -140,7 +140,7 @@ export function Services() {
 						transition={{ delay: index * 0.1 }}
 					>
 						<motion.div
-							className="group h-full p-8 rounded-2xl bg-[var(--card)] border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-all duration-300 shadow-[var(--shadow)]"
+							className="group h-full p-8 rounded-2xl bg-(--card) border border-(--card-border) hover:border-[var(--accent)]/30 transition-all duration-300 shadow-[var(--shadow)]"
 							whileHover={{ y: -4 }}
 						>
 							{/* Icon */}
@@ -168,7 +168,7 @@ export function Services() {
 								{service.features.map((feature) => (
 									<li
 										key={feature}
-										className="flex items-center gap-2 text-sm text-[var(--muted)]"
+										className="flex items-center gap-2 text-sm text-(--muted)"
 									>
 										<svg
 											className="w-4 h-4 text-cyan-500 shrink-0"
@@ -208,7 +208,7 @@ export function Services() {
 					whileHover={{ scale: 1.02 }}
 					whileTap={{ scale: 0.98 }}
 				>
-					Let's Discuss Your Project
+					Let&apos;s Discuss Your Project
 					<svg
 						className="w-5 h-5"
 						fill="none"

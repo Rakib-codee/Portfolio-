@@ -39,9 +39,9 @@ const contactMethods = [
 
 export function Contact() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 flex flex-col items-center">
       {/* Section Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 w-full flex flex-col items-center">
         <motion.span
           className="inline-block text-cyan-400 font-mono text-sm tracking-wider uppercase"
           initial={{ opacity: 0 }}
@@ -51,7 +51,7 @@ export function Contact() {
           Get In Touch
         </motion.span>
         <Heading level={2}>Let&apos;s Work Together</Heading>
-        <Text muted className="max-w-2xl mx-auto">
+        <Text muted className="max-w-2xl text-center">
           I&apos;m currently open for freelance projects, full-time opportunities, and exciting collaborations. 
           Have a project in mind? Let&apos;s make it happen.
         </Text>

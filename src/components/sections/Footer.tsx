@@ -79,15 +79,10 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-[var(--card-border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-[var(--muted)]">
+          <p className="text-sm text-center items-center mx-auto text-[var(--muted)]">
             © {currentYear} Md Mahfujur Rahman Rakib. All rights reserved.
           </p>
-          <p className="text-sm text-[var(--muted)]">
-            Built with{" "}
-            <span className="text-[var(--accent)]">Next.js</span>,{" "}
-            <span className="text-[var(--accent)]">Tailwind</span> &{" "}
-            <span className="text-[var(--accent)]">Framer Motion</span>
-          </p>
+    
         </div>
       </div>
     </footer>
