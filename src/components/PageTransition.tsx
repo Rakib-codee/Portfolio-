@@ -101,7 +101,7 @@ export function OverlayTransition({ children }: PageTransitionProps) {
       <AnimatePresence mode="wait">
         <motion.div
           key={`overlay-${pathname}`}
-          className="fixed inset-0 z-[100] pointer-events-none"
+          className="fixed inset-0 z-100 pointer-events-none"
         >
           {[...Array(5)].map((_, i) => (
             <motion.div

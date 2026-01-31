@@ -30,7 +30,7 @@ export default function Home() {
       <Navbar />
       
       <FadeScaleTransition>
-        <main className="bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+        <main className="bg-(--background) text-(--foreground) transition-colors duration-300">
           {/* Hero Section - Extra large spacing */}
           <Section id="hero" className="pt-32 pb-24 relative overflow-hidden" spacing="none">
             {/* 3D Background */}

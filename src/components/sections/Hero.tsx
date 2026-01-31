@@ -29,7 +29,7 @@ export function Hero() {
       >
         {/* Status Badge */}
         <motion.div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--card)] border border-[var(--card-border)] shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-(--card) border-(--card-border) shadow-sm"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -38,7 +38,7 @@ export function Hero() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-sm font-medium text-[var(--foreground)]">Available for new projects</span>
+          <span className="text-sm font-medium text-(--foreground)">Available for new projects</span>
         </motion.div>
 
         {/* Main Headline - Bold & Memorable */}
@@ -49,10 +49,10 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="text-[var(--foreground)]">I build </span>
+            <span className="text-(--foreground)">I build </span>
             <span className="bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">digital experiences</span>
             <br />
-            <span className="text-[var(--foreground)]">that users </span>
+            <span className="text-(--foreground)">that users </span>
             <span className="relative">
               <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">love</span>
               <motion.svg
@@ -74,7 +74,7 @@ export function Hero() {
           </motion.h1>
           
           <motion.p
-            className="text-lg text-[var(--muted)] font-medium"
+            className="text-lg text-(--muted) font-medium"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -90,7 +90,7 @@ export function Hero() {
           transition={{ delay: 0.6 }}
         >
           <Text size="lg" muted className="max-w-xl leading-relaxed">
-            I transform ideas into <span className="text-[var(--foreground)] font-medium">fast, beautiful, and accessible</span> web applications. 
+            I transform ideas into <span className="text-(--foreground) font-medium">fast, beautiful, and accessible</span> web applications.
             Specializing in React, Next.js, and modern design systems that drive real business results.
           </Text>
         </motion.div>
@@ -114,7 +114,7 @@ export function Hero() {
               ease: "easeInOut",
             }}
           />
-          <div className="relative h-full rounded-3xl bg-[var(--card)] border border-[var(--card-border)] overflow-hidden flex items-center justify-center shadow-lg">
+          <div className="relative h-full rounded-3xl bg-(--card) border-(--card-border) overflow-hidden flex items-center justify-center shadow-lg">
             <div className="relative h-52 w-52 sm:h-60 sm:w-60 rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/30">
               <Image
                 src="/hero.webp"
@@ -155,7 +155,7 @@ export function Hero() {
           </motion.a>
           <a
             href="#contact"
-            className="px-8 py-4 text-[var(--foreground)] font-medium rounded-xl border-2 border-[var(--card-border)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+            className="px-8 py-4 text-(--foreground) font-medium rounded-xl border-2 border-(--card-border) hover:border-(--accent) hover:text-(--accent) transition-colors"
           >
             Let&apos;s Talk
           </a>
@@ -163,22 +163,22 @@ export function Hero() {
 
         {/* Quick Stats */}
         <motion.div
-          className="flex flex-wrap items-center gap-8 pt-6 border-t border-[var(--card-border)]"
+          className="flex flex-wrap items-center gap-8 pt-6 border-t border-(--card-border)"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
         >
           <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">2+</p>
-            <p className="text-sm text-[var(--muted)]">Years Experience</p>
+            <p className="text-2xl font-bold text-(--foreground)">2+</p>
+            <p className="text-sm text-(--muted)">Years Experience</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">25+</p>
-            <p className="text-sm text-[var(--muted)]">Projects Delivered</p>
+            <p className="text-2xl font-bold text-(--foreground)">25+</p>
+            <p className="text-sm text-(--muted)">Projects Delivered</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">15+</p>
-            <p className="text-sm text-[var(--muted)]">Happy Clients</p>
+            <p className="text-2xl font-bold text-(--foreground)">15+</p>
+            <p className="text-sm text-(--muted)">Happy Clients</p>
           </div>
         </motion.div>
 
@@ -191,7 +191,7 @@ export function Hero() {
         >
           <a
             href={links.github}
-            className="p-3 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
+            className="p-3 rounded-xl bg-(--card) border-(--card-border) text-(--muted) hover:text-(--accent) hover:border-(--accent) transition-all"
             aria-label="GitHub"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -200,7 +200,7 @@ export function Hero() {
           </a>
           <a
             href={links.linkedin}
-            className="p-3 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
+            className="p-3 rounded-xl bg-(--card) border-(--card-border) text-(--muted) hover:text-(--accent) hover:border-(--accent) transition-all"
             aria-label="LinkedIn"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -209,7 +209,7 @@ export function Hero() {
           </a>
           <a
             href={`mailto:${links.email}`}
-            className="p-3 rounded-xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-all"
+            className="p-3 rounded-xl bg-(--card) border-(--card-border) text-(--muted) hover:text-(--accent) hover:border-(--accent) transition-all"
             aria-label="Email"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +242,7 @@ export function Hero() {
 
         {/* Main avatar container */}
         <motion.div
-          className="relative h-full rounded-3xl bg-[var(--card)] border border-[var(--card-border)] backdrop-blur-sm overflow-hidden flex items-center justify-center shadow-lg"
+          className="relative h-full rounded-3xl bg-(--card) border-(--card-border) backdrop-blur-sm overflow-hidden flex items-center justify-center shadow-lg"
           variants={floatingAnimation}
           initial="initial"
           animate="animate"

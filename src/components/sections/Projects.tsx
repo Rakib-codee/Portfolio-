@@ -66,7 +66,7 @@ export function Projects() {
             className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
               activeCategory === cat.id
                 ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
-                : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-(--accent) hover:text-(--accent)"
             }`}
           >
             {cat.label}
@@ -87,9 +87,9 @@ export function Projects() {
               transition={{ delay: index * 0.1, duration: 0.4 }}
             >
               <motion.div
-                className={`group relative bg-[var(--card)] border border-[var(--card-border)] rounded-2xl overflow-hidden h-full cursor-pointer ${
-                  expandedProject === project.id ? "ring-2 ring-cyan-500" : ""
-                }`}
+                className={`group relative bg-(--card) border-(--card-border) rounded-2xl overflow-hidden h-full cursor-pointer ${
+                    expandedProject === project.id ? "ring-2 ring-cyan-500" : ""
+                  }`}
                 style={{ boxShadow: "var(--shadow)" }}
                 whileHover={{ y: -8, borderColor: "rgba(6, 182, 212, 0.4)" }}
                 transition={{ duration: 0.3 }}
@@ -111,7 +111,7 @@ export function Projects() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-[var(--card)] to-[var(--background)] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-linear-to-br from-cyan-500/20 via-(--card) to-(--background) flex items-center justify-center">
                       <svg className="w-16 h-16 text-cyan-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
@@ -137,7 +137,7 @@ export function Projects() {
                   </motion.a>
                   <motion.a
                     href={project.githubUrl}
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/80 backdrop-blur-sm text-[var(--foreground)] font-medium rounded-lg border border-[var(--card-border)]"
+                    className="flex items-center gap-2 px-4 py-2 bg-(--card)/80 backdrop-blur-sm text-(--foreground) font-medium rounded-lg border-(--card-border)"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -158,7 +158,7 @@ export function Projects() {
                     </Heading>
                     <motion.span
                       animate={{ rotate: expandedProject === project.id ? 180 : 0 }}
-                      className="text-[var(--muted)]"
+                      className="text-(--muted)"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -180,26 +180,26 @@ export function Projects() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 mt-4 border-t border-[var(--card-border)] space-y-4">
+                      <div className="pt-4 mt-4 border-t border-(--card-border) space-y-4">
                         <div className="flex items-start gap-3">
-                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-bold">!</span>
+                          <span className="shrink-0 w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-bold">!</span>
                           <div>
                             <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-1">Problem</p>
-                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.problem}</p>
+                            <p className="text-sm text-(--muted)">{project.caseStudy.problem}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm font-bold">→</span>
+                          <span className="shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm font-bold">→</span>
                           <div>
                             <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">Solution</p>
-                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.solution}</p>
+                            <p className="text-sm text-(--muted)">{project.caseStudy.solution}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-3">
-                          <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-bold">✓</span>
+                          <span className="shrink-0 w-8 h-8 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-bold">✓</span>
                           <div>
                             <p className="text-xs font-semibold text-green-400 uppercase tracking-wider mb-1">Result</p>
-                            <p className="text-sm text-[var(--muted)]">{project.caseStudy.result}</p>
+                            <p className="text-sm text-(--muted)">{project.caseStudy.result}</p>
                           </div>
                         </div>
                       </div>
@@ -212,7 +212,7 @@ export function Projects() {
                   {project.tags.slice(0, 4).map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-1 text-xs font-medium text-[var(--muted)] bg-[var(--card-border)]/50 rounded-md"
+                      className="px-2 py-1 text-xs font-medium text-(--muted) bg-(--card-border)/50 rounded-md"
                     >
                       {tag}
                     </span>
@@ -244,8 +244,8 @@ export function Projects() {
             disabled={currentPage === 1}
             className={`p-2 rounded-lg border transition-all ${
               currentPage === 1
-                ? "border-[var(--card-border)] text-[var(--muted)] cursor-not-allowed opacity-50"
-                : "border-[var(--card-border)] text-[var(--foreground)] hover:border-cyan-500 hover:text-cyan-500"
+                ? "border-(--card-border) text-(--muted) cursor-not-allowed opacity-50"
+                : "border-(--card-border) text-(--foreground) hover:border-cyan-500 hover:text-cyan-500"
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,7 +261,7 @@ export function Projects() {
               className={`w-10 h-10 rounded-lg font-medium transition-all ${
                 currentPage === page
                   ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
-                  : "bg-[var(--card)] text-[var(--muted)] border border-[var(--card-border)] hover:border-cyan-500 hover:text-cyan-500"
+                  : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-cyan-500 hover:text-cyan-500"
               }`}
             >
               {page}
@@ -274,8 +274,8 @@ export function Projects() {
             disabled={currentPage === totalPages}
             className={`p-2 rounded-lg border transition-all ${
               currentPage === totalPages
-                ? "border-[var(--card-border)] text-[var(--muted)] cursor-not-allowed opacity-50"
-                : "border-[var(--card-border)] text-[var(--foreground)] hover:border-cyan-500 hover:text-cyan-500"
+                ? "border-(--card-border) text-(--muted) cursor-not-allowed opacity-50"
+                : "border-(--card-border) text-(--foreground) hover:border-cyan-500 hover:text-cyan-500"
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -287,7 +287,7 @@ export function Projects() {
 
       {/* Page Info */}
       {totalPages > 1 && (
-        <p className="text-center text-sm text-[var(--muted)]">
+        <p className="text-center text-sm text-(--muted)">
           Showing {startIndex + 1}-{Math.min(startIndex + PROJECTS_PER_PAGE, filteredProjects.length)} of {filteredProjects.length} projects
         </p>
       )}
