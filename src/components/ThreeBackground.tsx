@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useEffect, useState, ReactNode } from "react";
+import { useRef, useState, ReactNode } from "react";
 import { Canvas, useFrame, RootState } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, Sphere, Stars, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -34,7 +34,8 @@ function AnimatedSphere() {
 
 // Floating particles
 function Particles({ count = 500 }: { count?: number }) {
-  const positions = useMemo(() => {
+  // Generate random positions only once per count
+  const [positions] = useState(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 20;
@@ -42,7 +43,7 @@ function Particles({ count = 500 }: { count?: number }) {
       pos[i * 3 + 2] = (Math.random() - 0.5) * 20;
     }
     return pos;
-  }, [count]);
+  });
 
   const pointsRef = useRef<THREE.Points>(null);
 
@@ -60,7 +61,7 @@ function Particles({ count = 500 }: { count?: number }) {
                   attach="attributes-position"
                   count={count}
                   array={positions}
-                  itemSize={3} args={[]}/>
+                  itemSize={3}/>
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
@@ -140,16 +141,6 @@ function SceneContent() {
 
 // Main 3D Hero Background
 export function HeroBackground3D() {
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <div className="absolute inset-0 -z-10 opacity-60">
       <Canvas
@@ -197,16 +188,6 @@ function FloatingShapesContent() {
 
 // Floating geometric shapes for sections
 export function FloatingShapes() {
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
@@ -227,16 +208,6 @@ export function Card3D({ children }: { children: ReactNode }) {
 
 // Minimal particle background (lighter alternative)
 export function ParticleBackground() {
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5] }}>

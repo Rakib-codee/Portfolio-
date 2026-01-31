@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ComingSoonPage() {
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 overflow-hidden relative">
+    <div className="min-h-screen bg-(--background) flex items-center justify-center px-4 overflow-hidden relative">
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Floating shapes */}
@@ -52,7 +52,7 @@ export default function ComingSoonPage() {
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
           className="mb-8"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full shadow-lg shadow-orange-500/30">
+          <div className="inline-flex items-center gap-3 px-6 py-3 bg-linear-to-r from-orange-500 to-yellow-500 rounded-full shadow-lg shadow-orange-500/30">
             <motion.span
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
@@ -94,7 +94,7 @@ export default function ComingSoonPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4"
+          className="text-4xl md:text-5xl font-bold text-(--foreground) mb-4"
         >
           Coming <span className="text-cyan-500">Soon!</span>
         </motion.h1>
@@ -104,7 +104,7 @@ export default function ComingSoonPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-[var(--muted)] text-lg mb-8 leading-relaxed"
+            className="text-(--muted) text-lg mb-8 leading-relaxed"
         >
           This project demo is currently under development. 
           <br />
@@ -119,10 +119,17 @@ export default function ComingSoonPage() {
           className="mb-10"
         >
           <div className="flex items-center justify-center gap-4 mb-3">
-            <span className="text-sm text-[var(--muted)]">Progress</span>
-            <div className="w-48 h-3 bg-[var(--card)] rounded-full overflow-hidden border border-[var(--card-border)]">
+            <span className="text-sm text-(--muted)">Progress</span>
+            <div 
+              className="w-48 h-3 bg-(--card) rounded-full overflow-hidden border border-(--card-border)"
+              role="progressbar"
+              aria-valuenow={70}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Project progress"
+            >
               <motion.div
-                className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full"
+                className="h-full bg-linear-to-r from-cyan-500 to-cyan-400 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: "70%" }}
                 transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
@@ -142,7 +149,7 @@ export default function ComingSoonPage() {
           {["🔨", "⚙️", "🎨", "🚀", "💡"].map((emoji, index) => (
             <motion.div
               key={emoji}
-              className="w-14 h-14 bg-[var(--card)] border border-[var(--card-border)] rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+              className="w-14 h-14 bg-(--card) border border-(--card-border) rounded-2xl flex items-center justify-center text-2xl shadow-lg"
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{
@@ -156,45 +163,40 @@ export default function ComingSoonPage() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Back button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-        >
-          <Link href="/#projects">
-            <motion.button
-              className="inline-flex items-center gap-3 px-8 py-4 bg-cyan-500 text-black font-semibold rounded-xl shadow-lg shadow-cyan-500/25 hover:bg-cyan-400 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+        <Link href="/#projects">
+          <motion.button
+            className="inline-flex items-center gap-3 px-8 py-4 bg-cyan-500 text-black font-semibold rounded-xl shadow-lg shadow-cyan-500/25 hover:bg-cyan-400 transition-colors cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              Back to Portfolio
-            </motion.button>
-          </Link>
-        </motion.div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            Back to Portfolio
+          </motion.button>
+        </Link>
 
         {/* Footer note */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-10 text-sm text-[var(--muted)]"
+          className="mt-10 text-sm text-(--muted)"
         >
-          Want to know more? <Link href="/#contact" className="text-cyan-500 hover:underline">Contact me</Link> 💬
+          Want to know more?{' '}
+          <Link href="/#contact" className="text-cyan-500 hover:underline">Contact me</Link> 💬
         </motion.p>
       </div>
     </div>

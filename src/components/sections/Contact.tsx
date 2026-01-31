@@ -7,7 +7,7 @@ import { Heading, Text } from "../ui";
 const contactMethods = [
   {
     title: "Email",
-    value: "rakibislam4913@gmail.com",
+    value: links.email,
     href: `mailto:${links.email}`,
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
