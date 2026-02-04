@@ -255,6 +255,8 @@ Update CSS variables in `src/app/globals.css`:
 
 ## 📄 License
 
+Copyright © 2026 **Md Mahfujur Rahman Rakib**
+
 This project is open source and available under the [MIT License](LICENSE).
 
 <br/>
