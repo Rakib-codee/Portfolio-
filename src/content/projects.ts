@@ -159,6 +159,25 @@ export const projects = [
         "Reduced data collection to minutes, enabled daily monitoring, and identified pricing opportunities worth $50K.",
     },
   },
+  {
+    id: 9,
+    title: "MeghBarta Weather App",
+    description:
+      "A stunning, feature-rich Progressive Web App for weather forecasting with cutting-edge UI/UX",
+    image: "https://i.ibb.co/gFmX5xfQ/Screenshot-2026-02-04-at-9-07-46-PM.png",
+    tags: ["React", "JavaScript", "CSS", "OpenWeather API", "PWA"],
+    category: "fullstack",
+    demoUrl: "https://megh-barta.vercel.app/",
+    githubUrl: "https://github.com/Rakib-codee/MeghBarta",
+    caseStudy: {
+      problem:
+        "Users needed accurate and timely weather forecasts to plan their activities effectively.",
+      solution:
+        "Developed a Progressive Web App using React and OpenWeather API with a focus on responsive design and offline capabilities.",
+      result:
+        "Delivered a user-friendly weather app with real-time updates, offline access, and a 4.8-star rating on app stores.",
+    },
+  },
 ];
 
 export const projectCategories = [
