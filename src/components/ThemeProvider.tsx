@@ -17,13 +17,14 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      applyTheme(savedTheme);
-    }
+    const initialTheme = savedTheme || "dark";
+    setTheme(initialTheme);
+    applyTheme(initialTheme);
+    setMounted(true);
   }, []);
 
   const applyTheme = (newTheme: Theme) => {
