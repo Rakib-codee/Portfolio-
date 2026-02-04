@@ -13,6 +13,7 @@ const floatingAnimation: Variants = {
       duration: 6,
       repeat: Infinity,
       ease: "easeInOut" as const,
+      repeatType: "loop",
     },
   },
 };
@@ -103,7 +104,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
         >
           <motion.div
-            className="absolute inset-0 rounded-full bg-linear-to-br from-cyan-500/20 via-blue-500/10 to-purple-500/20 blur-3xl"
+            className="absolute inset-0 rounded-full bg-linear-to-br from-cyan-500/20 via-blue-500/10 to-purple-500/20 blur-3xl will-change-transform"
             animate={{
               scale: [1, 1.1, 1],
               opacity: [0.5, 0.8, 0.5],
@@ -112,6 +113,7 @@ export function Hero() {
               duration: 4,
               repeat: Infinity,
               ease: "easeInOut",
+              repeatType: "loop",
             }}
           />
           <div className="relative h-full rounded-3xl bg-(--card) border-(--card-border) overflow-hidden flex items-center justify-center shadow-lg">
@@ -228,7 +230,7 @@ export function Hero() {
       >
         {/* Animated glow background */}
         <motion.div
-          className="absolute inset-0  rounded-full bg-linear-to-br from-cyan-500/20 via-blue-500/10 to-purple-500/20 blur-3xl"
+          className="absolute inset-0 rounded-full bg-linear-to-br from-cyan-500/20 via-blue-500/10 to-purple-500/20 blur-3xl will-change-transform"
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.5, 0.8, 0.5],
@@ -237,12 +239,13 @@ export function Hero() {
             duration: 4,
             repeat: Infinity,
             ease: "easeInOut",
+            repeatType: "loop",
           }}
         />
 
         {/* Main avatar container */}
         <motion.div
-          className="relative h-full rounded-3xl bg-(--card) border-(--card-border) backdrop-blur-sm overflow-hidden flex items-center justify-center shadow-lg"
+          className="relative h-full rounded-3xl bg-(--card) border-(--card-border) backdrop-blur-sm overflow-hidden flex items-center justify-center shadow-lg will-change-transform"
           variants={floatingAnimation}
           initial="initial"
           animate="animate"
@@ -251,16 +254,16 @@ export function Hero() {
           <div className="relative">
             {/* Outer ring */}
             <motion.div
-              className="absolute -inset-8 rounded-full border-2 border-cyan-500/20"
+              className="absolute -inset-8 rounded-full border-2 border-cyan-500/20 will-change-transform"
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear", repeatType: "loop" }}
             />
             
             {/* Middle ring */}
             <motion.div
-              className="absolute -inset-4 rounded-full border border-blue-500/30"
+              className="absolute -inset-4 rounded-full border border-blue-500/30 will-change-transform"
               animate={{ rotate: -360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear", repeatType: "loop" }}
             />
 
             {/* Real Profile Image */}
@@ -276,14 +279,14 @@ export function Hero() {
 
             {/* Floating dots */}
             <motion.div
-              className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-cyan-400"
+              className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-cyan-400 will-change-transform"
               animate={{ y: [-5, 5, -5], opacity: [1, 0.5, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
+              transition={{ duration: 3, repeat: Infinity, repeatType: "loop" }}
             />
             <motion.div
-              className="absolute -bottom-2 -left-2 h-3 w-3 rounded-full bg-purple-400"
+              className="absolute -bottom-2 -left-2 h-3 w-3 rounded-full bg-purple-400 will-change-transform"
               animate={{ y: [5, -5, 5], opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
+              transition={{ duration: 2.5, repeat: Infinity, repeatType: "loop" }}
             />
           </div>
         </motion.div>

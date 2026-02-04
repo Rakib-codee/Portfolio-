@@ -122,8 +122,8 @@ export function Projects() {
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                 
-                {/* Quick action buttons - visible on hover */}
-                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Quick action buttons - visible on hover (desktop) and always visible on mobile */}
+                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                   <motion.a
                     href={project.demoUrl}
                     className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg"

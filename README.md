@@ -16,7 +16,11 @@ A modern, responsive developer portfolio built with Next.js, Tailwind CSS, Frame
 
 ## Live Demo
 
+<<<<<<< HEAD
 https://portfolio-alpha-orpin-15.vercel.app/
+=======
+[View Live Site](https://your-deployment-url.vercel.app)
+>>>>>>> 1e159a6 (update resume like)
 
 ## Getting Started
 
