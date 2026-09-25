@@ -1,85 +1,87 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { links } from "@/content/links";
-
-const currentYear = 2026;
-
-const footerLinks = {
-  navigation: [
-    { href: "#hero", label: "Home" },
-    { href: "#about", label: "About" },
-    { href: "#projects", label: "Projects" },
-    { href: "#services", label: "Services" },
-    { href: "#contact", label: "Contact" },
-  ],
-  social: [
-    { href: links.github, label: "GitHub" },
-    { href: links.linkedin, label: "LinkedIn" },
-    { href: links.email, label: "Email" },
-  ],
-};
+import Link from "next/link";
+import { GitHub, LinkedIn, Mail } from "@/components/ui/Icons";
+import { profile } from "@/content/profile";
+import { navItems } from "@/lib/site";
 
 export function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="bg-[var(--background)] border-t border-[var(--card-border)] transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-16">
-        <div className="grid gap-12 md:grid-cols-3">
-          {/* Brand */}
-          <div className="space-y-4">
-            <motion.a
-              href="#hero"
-              className="inline-block"
-              whileHover={{ scale: 1.02 }}
-            >
-              <p className="font-[family-name:var(--font-space-grotesk)] text-xl tracking-wide font-extrabold">Mahfujur <span className="text-orange-500">Rahman</span></p>
-            </motion.a>
-            <p className="text-[var(--muted)] text-sm leading-relaxed max-w-xs">
-              Full Stack Developer & Designer crafting beautiful, performant web experiences.
-            </p>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <h3 className="font-semibold text-[var(--foreground)] mb-4">Navigation</h3>
-            <ul className="space-y-2">
-              {footerLinks.navigation.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h3 className="font-semibold text-[var(--foreground)] mb-4">Connect</h3>
-            <ul className="space-y-2">
-              {footerLinks.social.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+    <footer className="relative border-t border-border">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" aria-hidden />
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <p className="font-display text-xl font-bold tracking-tight">{profile.name}</p>
+          <p className="mt-2 max-w-sm text-sm text-muted">{profile.role}</p>
+          <ul className="mt-5 flex gap-2" aria-label="Profiles">
+            {[
+              { href: profile.github, label: "GitHub", Icon: GitHub },
+              { href: profile.linkedin, label: "LinkedIn", Icon: LinkedIn },
+              { href: `mailto:${profile.email}`, label: "Email", Icon: Mail },
+            ].map(({ href, label, Icon }) => (
+              <li key={label}>
+                <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} aria-label={label} className="glass grid h-9 w-9 place-items-center rounded-full text-muted transition-colors hover:text-accent">
+                  <Icon size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-[var(--card-border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-center items-center mx-auto text-[var(--muted)]">
-            © {currentYear} Md Mahfujur Rahman Rakib. All rights reserved.
+        <nav aria-label="Footer">
+          <p className="mb-3 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-2">Navigate</p>
+          <ul className="space-y-2 text-sm">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <a href={item.href} className="text-muted transition-colors hover:text-fg">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <Link href="/cv" className="text-muted transition-colors hover:text-fg">
+                Academic CV
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div>
+          <p className="mb-3 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-2">Connect</p>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a href={`mailto:${profile.email}`} className="text-muted transition-colors hover:text-fg">
+                {profile.email}
+              </a>
+            </li>
+            <li>
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-fg">
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-fg">
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-fg">
+                CV (PDF)
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-muted-2 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <p>
+            © {year} {profile.name}. All rights reserved.
           </p>
-    
+          <p>
+            Built with Next.js, React Three Fiber and Framer Motion ·{" "}
+            <a href="https://github.com/Rakib-codee/portfolio-" target="_blank" rel="noopener noreferrer" className="hover:text-fg">
+              Source
+            </a>
+          </p>
         </div>
       </div>
     </footer>
