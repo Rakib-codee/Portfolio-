@@ -1,7 +1,5 @@
-import { ThreeElements } from '@react-three/fiber';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements extends ThreeElements {}
-  }
-}
+/**
+ * @react-three/fiber v9 registers its JSX element types itself, so no
+ * manual augmentation is needed. This module intentionally exports nothing.
+ */
+export {};
