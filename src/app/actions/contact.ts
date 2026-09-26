@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { Resend } from "resend";
 import { profile } from "@/content/profile";
 
@@ -15,6 +16,50 @@ export type ContactState = {
 // initial state object lives in the client form component instead.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/* ------------------------------------------------------------------
+   Abuse protection for provider sends.
+   In-memory sliding windows: per-IP and global. State lives per server
+   instance, which on Vercel means per warm function; that is enough to
+   stop a single client from draining the Resend quota without adding a
+   paid store or secret. Swap `throttled` for a shared store (e.g. Upstash)
+   if stronger guarantees are ever needed.
+   ------------------------------------------------------------------ */
+const IP_WINDOW_MS = 10 * 60 * 1000;
+const IP_MAX = 3;
+const GLOBAL_WINDOW_MS = 60 * 60 * 1000;
+const GLOBAL_MAX = 60;
+
+const perIp = new Map<string, number[]>();
+let globalHits: number[] = [];
+
+function throttled(ip: string): boolean {
+  const now = Date.now();
+  globalHits = globalHits.filter((t) => now - t < GLOBAL_WINDOW_MS);
+  if (globalHits.length >= GLOBAL_MAX) return true;
+
+  const hits = (perIp.get(ip) ?? []).filter((t) => now - t < IP_WINDOW_MS);
+  if (hits.length >= IP_MAX) {
+    perIp.set(ip, hits);
+    return true;
+  }
+  hits.push(now);
+  perIp.set(ip, hits);
+  globalHits.push(now);
+
+  // Keep the map bounded: drop entries whose window has fully expired.
+  if (perIp.size > 2000) {
+    for (const [key, times] of perIp) {
+      if (times.every((t) => now - t >= IP_WINDOW_MS)) perIp.delete(key);
+    }
+  }
+  return false;
+}
+
+async function clientIp(): Promise<string> {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+}
 
 function clean(value: FormDataEntryValue | null, max: number): string {
   return String(value ?? "")
@@ -55,6 +100,13 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
       status: "fallback",
       message: "Email sending is not configured on this deployment yet. Use the button below to send it from your mail app.",
       mailto: `mailto:${to}?${params.toString()}`,
+    };
+  }
+
+  if (throttled(await clientIp())) {
+    return {
+      status: "error",
+      message: "Too many messages from this network in a short time. Please try again later or email me directly.",
     };
   }
 

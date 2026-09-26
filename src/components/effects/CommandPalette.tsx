@@ -3,7 +3,7 @@
 import { Command } from "cmdk";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
@@ -13,30 +13,41 @@ type PaletteContextValue = {
   open: boolean;
   setOpen: (open: boolean) => void;
   toggle: () => void;
+  /** Element that had focus when the palette opened; focus returns here on close. */
+  openerRef: React.RefObject<HTMLElement | null>;
 };
 
-const PaletteContext = createContext<PaletteContextValue>({ open: false, setOpen: () => {}, toggle: () => {} });
+const PaletteContext = createContext<PaletteContextValue>({ open: false, setOpen: () => {}, toggle: () => {}, openerRef: { current: null } });
 
 export function useCommandPalette() {
   return useContext(PaletteContext);
 }
 
 export function CommandPaletteProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const toggle = useCallback(() => setOpen((v) => !v), []);
+  const [open, setOpenState] = useState(false);
+  const openerRef = useRef<HTMLElement | null>(null);
+
+  // Record the opener before React re-renders, so autoFocus inside the
+  // dialog cannot overwrite it.
+  const setOpen = useCallback((next: boolean) => {
+    if (next) openerRef.current = document.activeElement as HTMLElement | null;
+    setOpenState(next);
+  }, []);
+
+  const toggle = useCallback(() => setOpen(!open), [open, setOpen]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setOpen((v) => !v);
+        toggle();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [toggle]);
 
-  const value = useMemo(() => ({ open, setOpen, toggle }), [open, toggle]);
+  const value = useMemo(() => ({ open, setOpen, toggle, openerRef }), [open, setOpen, toggle]);
 
   return (
     <PaletteContext.Provider value={value}>
@@ -63,10 +74,41 @@ const icons = {
   mail: "M4 6h16v12H4zM4 7l8 6 8-6",
 };
 
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 function CommandPalette() {
-  const { open, setOpen } = useCommandPalette();
+  const { open, setOpen, openerRef } = useCommandPalette();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Focus management: move focus into the dialog on open, restore it to the
+  // opener (recorded by the provider) on close.
+  useEffect(() => {
+    if (!open) return;
+    const opener = openerRef.current;
+    dialogRef.current?.querySelector<HTMLElement>("[cmdk-input]")?.focus();
+    return () => {
+      opener?.focus?.();
+    };
+  }, [open, openerRef]);
+
+  // Focus trap: keep Tab / Shift+Tab cycling inside the dialog.
+  const trapTab = useCallback((event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Tab" || !dialogRef.current) return;
+    const nodes = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.offsetParent !== null);
+    if (nodes.length === 0) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    const active = document.activeElement;
+    if (event.shiftKey && (active === first || !dialogRef.current.contains(active))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }, []);
 
   const run = useCallback(
     (action: () => void) => {
@@ -104,9 +146,11 @@ function CommandPalette() {
         >
           <button type="button" aria-label="Close command palette" className="absolute inset-0 bg-bg/70 backdrop-blur-sm" onClick={() => setOpen(false)} />
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
+            onKeyDown={trapTab}
             className="glass relative w-full max-w-xl overflow-hidden rounded-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]"
             initial={{ opacity: 0, y: -12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
