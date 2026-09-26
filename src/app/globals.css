@@ -1,23 +1,382 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-background: #09090b;
-  --color-foreground: #fafafa;
-  --color-accent: #06b6d4;
-  --color-muted: #a1a1aa;
-  --color-card: #18181b;
-  --color-card-border: #27272a;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ------------------------------------------------------------------
+   Design tokens. Dark is the default; light is html[data-theme="light"].
+   Every colour on the site comes from these variables.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #050507;
+  --bg-elev: #0b0b11;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --fg: #f5f5f7;
+  --muted: #a6a6b8;
+  --muted-2: #72728a;
+  --accent: #22d3ee;
+  --accent-2: #a78bfa;
+  --accent-3: #f472b6;
+  --accent-fg: #06121a;
+  --grid: rgba(255, 255, 255, 0.05);
+  --glow: rgba(34, 211, 238, 0.32);
+  --ring: #22d3ee;
+  --success: #4ade80;
+  --danger: #fb7185;
+  color-scheme: dark;
 }
 
-/* Default CSS variables for initial render (prevents flash) */
-:root {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #18181b;
-  --card-border: #27272a;
-  --muted: #a1a1aa;
-  --accent: #06b6d4;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+html[data-theme="light"] {
+  --bg: #f6f6fa;
+  --bg-elev: #ffffff;
+  --surface: rgba(10, 10, 25, 0.03);
+  --surface-strong: rgba(10, 10, 25, 0.06);
+  --border: rgba(10, 10, 25, 0.1);
+  --border-strong: rgba(10, 10, 25, 0.22);
+  --fg: #0a0a14;
+  --muted: #4b4b60;
+  --muted-2: #74748c;
+  --accent: #0e7490;
+  --accent-2: #6d28d9;
+  --accent-3: #be185d;
+  --accent-fg: #ffffff;
+  --grid: rgba(10, 10, 25, 0.06);
+  --glow: rgba(14, 116, 144, 0.22);
+  --ring: #0e7490;
+  --success: #15803d;
+  --danger: #be123c;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-accent-fg: var(--accent-fg);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ------------------------------------------------------------------
+   Surfaces and effects
+   ------------------------------------------------------------------ */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.fade-mask-b {
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 55%, var(--accent-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Spotlight card: JS sets --mx / --my as the pointer moves */
+.spotlight {
+  position: relative;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(
+    460px circle at var(--mx, 50%) var(--my, 50%),
+    var(--glow),
+    transparent 46%
+  );
+}
+.spotlight:hover::before,
+.spotlight:focus-within::before {
+  opacity: 0.6;
+}
+
+/* Rotating conic border used by the primary CTA and the flagship card */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.neon-border {
+  position: relative;
+  isolation: isolate;
+}
+.neon-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    var(--accent) 14%,
+    transparent 28%,
+    transparent 50%,
+    var(--accent-2) 64%,
+    transparent 78%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-angle 6s linear infinite;
+}
+
+@keyframes spin-angle {
+  to {
+    --angle: 360deg;
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: currentColor;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+/* Command palette (cmdk) */
+[cmdk-root] {
+  width: 100%;
+}
+[cmdk-input] {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 1rem;
+  padding: 1rem 1.25rem;
+  color: var(--fg);
+}
+[cmdk-input]::placeholder {
+  color: var(--muted-2);
+}
+[cmdk-list] {
+  max-height: 60vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem;
+}
+[cmdk-group-heading] {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  padding: 0.75rem 0.75rem 0.4rem;
+}
+[cmdk-item] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.75rem;
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+[cmdk-item][data-selected="true"] {
+  background: var(--surface-strong);
+  color: var(--accent);
+}
+[cmdk-empty] {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: remove every looping or decorative animation
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .neon-border::after,
+  .marquee-track,
+  .animate-float,
+  .pulse-dot::after {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Print: used by /cv
+   ------------------------------------------------------------------ */
+@media print {
+  html,
+  html[data-theme="light"],
+  html[data-theme="dark"] {
+    --bg: #ffffff;
+    --bg-elev: #ffffff;
+    --fg: #000000;
+    --muted: #333333;
+    --muted-2: #555555;
+    --border: #cfcfcf;
+    --surface: transparent;
+    --accent: #0e7490;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .no-print {
+    display: none !important;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .print-page {
+    max-width: none;
+    padding: 0;
+  }
 }

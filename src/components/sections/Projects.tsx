@@ -1,296 +1,109 @@
-"use client";
+import Link from "next/link";
+import { RevealGroup, RevealItem } from "@/components/effects/Reveal";
+import { Badge, Card, Heading, Section } from "@/components/ui";
+import { ArrowUpRight, External, GitHub } from "@/components/ui/Icons";
+import { ProjectImage } from "@/components/ui/ProjectImage";
+import { categoryLabels, featuredProjects, otherProjects, type Project } from "@/content/projects";
+import { scaleIn } from "@/lib/variants";
+import { cn } from "@/lib/utils";
 
-import Image from "next/image";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { projects, projectCategories } from "@/content/projects";
-import { Badge, Button, Heading, Text } from "../ui";
-
-const PROJECTS_PER_PAGE = 4;
-
-export function Projects() {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [expandedProject, setExpandedProject] = useState<number | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const filteredProjects = activeCategory === "all" 
-    ? projects 
-    : projects.filter(p => p.category === activeCategory);
-
-  // Reset to page 1 when category changes
-  const handleCategoryChange = (categoryId: string) => {
-    setActiveCategory(categoryId);
-    setCurrentPage(1);
-  };
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE);
-  const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
-  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
-
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-    setExpandedProject(null);
-  };
-
+function ProjectLinks({ project, className }: { project: Project; className?: string }) {
+  const { demo, github } = project.links;
+  if (!demo && !github) return null;
   return (
-    <div className="space-y-12 flex flex-col items-center">
-      {/* Section Header */}
-      <div className="text-center space-y-4 w-full flex flex-col items-center">
-        <motion.span
-          className="inline-block text-cyan-400 font-mono text-sm tracking-wider uppercase"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          My Recent Work
-        </motion.span>
-        <Heading level={2}>Featured Projects</Heading>
-        <Text muted className="max-w-2xl text-center">
-          Real projects with real impact. Click any project to see the full story — 
-          the problem, my solution, and the measurable results.
-        </Text>
-      </div>
-
-      {/* Category Filter */}
-      <motion.div 
-        className="flex flex-wrap justify-center gap-3"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        {projectCategories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => handleCategoryChange(cat.id)}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
-              activeCategory === cat.id
-                ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
-                : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-(--accent) hover:text-(--accent)"
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </motion.div>
-
-      {/* Projects Grid */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <AnimatePresence mode="popLayout">
-          {paginatedProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ delay: index * 0.1, duration: 0.4 }}
-            >
-              <motion.div
-                className={`group relative bg-(--card) border-(--card-border) rounded-2xl overflow-hidden h-full cursor-pointer ${
-                    expandedProject === project.id ? "ring-2 ring-cyan-500" : ""
-                  }`}
-                style={{ boxShadow: "var(--shadow)" }}
-                whileHover={{ y: -8, borderColor: "rgba(6, 182, 212, 0.4)" }}
-                transition={{ duration: 0.3 }}
-                onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-              >
-              {/* Project Image */}
-              <div className="relative h-56 overflow-hidden">
-                <motion.div
-                  className="absolute inset-0"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-linear-to-br from-cyan-500/20 via-(--card) to-(--background) flex items-center justify-center">
-                      <svg className="w-16 h-16 text-cyan-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                  )}
-                </motion.div>
-                
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                
-                {/* Quick action buttons - visible on hover (desktop) and always visible on mobile */}
-                <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                  <motion.a
-                    href={project.demoUrl}
-                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-black font-medium rounded-lg"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Demo
-                  </motion.a>
-                  <motion.a
-                    href={project.githubUrl}
-                    className="flex items-center gap-2 px-4 py-2 bg-(--card)/80 backdrop-blur-sm text-(--foreground) font-medium rounded-lg border-(--card-border)"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    Code
-                  </motion.a>
-                </div>
-              </div>
-
-              {/* Project Info */}
-              <div className="p-6 space-y-4">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <Heading level={3} className="text-xl group-hover:text-cyan-400 transition-colors">
-                      {project.title}
-                    </Heading>
-                    <motion.span
-                      animate={{ rotate: expandedProject === project.id ? 180 : 0 }}
-                      className="text-(--muted)"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </motion.span>
-                  </div>
-                  <Text muted size="sm" className="mt-2 line-clamp-2">
-                    {project.description}
-                  </Text>
-                </div>
-
-                {/* Case Study - Expandable */}
-                <AnimatePresence>
-                  {expandedProject === project.id && project.caseStudy && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-4 mt-4 border-t border-(--card-border) space-y-4">
-                        <div className="flex items-start gap-3">
-                          <span className="shrink-0 w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-bold">!</span>
-                          <div>
-                            <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-1">Problem</p>
-                            <p className="text-sm text-(--muted)">{project.caseStudy.problem}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <span className="shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm font-bold">→</span>
-                          <div>
-                            <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">Solution</p>
-                            <p className="text-sm text-(--muted)">{project.caseStudy.solution}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <span className="shrink-0 w-8 h-8 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-bold">✓</span>
-                          <div>
-                            <p className="text-xs font-semibold text-green-400 uppercase tracking-wider mb-1">Result</p>
-                            <p className="text-sm text-(--muted)">{project.caseStudy.result}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.slice(0, 4).map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 text-xs font-medium text-(--muted) bg-(--card-border)/50 rounded-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {project.tags.length > 4 && (
-                    <span className="px-2 py-1 text-xs font-medium text-cyan-400">
-                      +{project.tags.length - 4}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        ))}
-        </AnimatePresence>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <motion.div
-          className="flex items-center justify-center gap-2 pt-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          {/* Previous Button */}
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`p-2 rounded-lg border transition-all ${
-              currentPage === 1
-                ? "border-(--card-border) text-(--muted) cursor-not-allowed opacity-50"
-                : "border-(--card-border) text-(--foreground) hover:border-cyan-500 hover:text-cyan-500"
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          {/* Page Numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => goToPage(page)}
-              className={`w-10 h-10 rounded-lg font-medium transition-all ${
-                currentPage === page
-                  ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/25"
-                  : "bg-(--card) text-(--muted) border border-(--card-border) hover:border-cyan-500 hover:text-cyan-500"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-
-          {/* Next Button */}
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`p-2 rounded-lg border transition-all ${
-              currentPage === totalPages
-                ? "border-(--card-border) text-(--muted) cursor-not-allowed opacity-50"
-                : "border-(--card-border) text-(--foreground) hover:border-cyan-500 hover:text-cyan-500"
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </motion.div>
+    <div className={cn("relative z-10 flex items-center gap-2", className)}>
+      {github && (
+        <a href={github} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source on GitHub`} className="glass grid h-9 w-9 place-items-center rounded-full text-muted transition-colors hover:border-accent/60 hover:text-accent">
+          <GitHub size={16} />
+        </a>
       )}
-
-      {/* Page Info */}
-      {totalPages > 1 && (
-        <p className="text-center text-sm text-(--muted)">
-          Showing {startIndex + 1}-{Math.min(startIndex + PROJECTS_PER_PAGE, filteredProjects.length)} of {filteredProjects.length} projects
-        </p>
+      {demo && (
+        <a href={demo} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`} className="glass grid h-9 w-9 place-items-center rounded-full text-muted transition-colors hover:border-accent/60 hover:text-accent">
+          <External size={16} />
+        </a>
       )}
     </div>
+  );
+}
+
+function FeaturedCard({ project, flagship = false }: { project: Project; flagship?: boolean }) {
+  return (
+    <Card padded={false} neon={flagship} className={cn("group relative flex h-full flex-col overflow-hidden", flagship && "md:col-span-2")}>
+      <div className={cn("relative w-full overflow-hidden", flagship ? "aspect-[16/8]" : "aspect-[16/10]")}>
+        <ProjectImage
+          src={project.image}
+          alt={project.imageAlt}
+          title={project.title}
+          sizes={flagship ? "(max-width: 768px) 100vw, 1152px" : "(max-width: 768px) 100vw, 576px"}
+          className="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/20 to-transparent" aria-hidden />
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {flagship && <Badge variant="accent">Flagship</Badge>}
+          <Badge variant="outline" className="backdrop-blur">
+            {categoryLabels[project.category]}
+          </Badge>
+        </div>
+        <ProjectLinks project={project} className="absolute right-4 top-4" />
+      </div>
+
+      <div className="flex flex-1 flex-col p-6 sm:p-7">
+        <Heading level={3} className="text-xl sm:text-2xl">
+          <Link href={`/projects/${project.slug}`} className="after:absolute after:inset-0 after:content-['']">
+            {project.title}
+          </Link>
+        </Heading>
+        <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">{project.tagline}</p>
+        <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
+          {project.tags.slice(0, 5).map((tag) => (
+            <li key={tag} className="rounded-md bg-surface-strong px-2 py-0.5 font-mono text-[0.68rem] text-muted">
+              {tag}
+            </li>
+          ))}
+        </ul>
+        <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent">
+          Read case study
+          <ArrowUpRight size={15} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </Card>
+  );
+}
+
+export function Projects() {
+  return (
+    <Section id="projects" index="03" eyebrow="Featured projects" title="Systems I have shipped." description="Four projects with public code or a live deployment, flagship first. Each one has a full case study.">
+      <RevealGroup className="grid gap-5 md:grid-cols-2">
+        {featuredProjects.map((project, i) => (
+          <RevealItem key={project.slug} variants={scaleIn} className={cn("min-w-0", i === 0 && "md:col-span-2")}>
+            <FeaturedCard project={project} flagship={i === 0} />
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      {otherProjects.length > 0 && (
+        <div className="mt-10">
+          <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-2">More work</p>
+          <RevealGroup className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {otherProjects.map((project) => (
+              <RevealItem key={project.slug} className="min-w-0">
+                <Card className="group relative flex min-w-0 items-center gap-4 !p-4">
+                  <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+                    <ProjectImage src={project.image} alt={project.imageAlt} title={project.title} sizes="80px" className="[&>span]:text-xl" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <Link href={`/projects/${project.slug}`} className="font-display text-base font-semibold text-fg after:absolute after:inset-0 after:content-['']">
+                      {project.title}
+                    </Link>
+                    <p className="truncate text-xs text-muted">{project.tags.join(" · ")}</p>
+                  </div>
+                  <ProjectLinks project={project} />
+                </Card>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      )}
+    </Section>
   );
 }

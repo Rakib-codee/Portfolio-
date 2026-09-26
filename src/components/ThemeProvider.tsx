@@ -1,74 +1,58 @@
-
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react";
 
-type Theme = "dark" | "light";
+export type Theme = "dark" | "light";
 
-interface ThemeContextType {
+type ThemeContextValue = {
   theme: Theme;
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
-}
+};
 
-const ThemeContext = createContext<ThemeContextType>({
+const ThemeContext = createContext<ThemeContextValue>({
   theme: "dark",
+  setTheme: () => {},
   toggleTheme: () => {},
 });
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
+const STORAGE_KEY = "theme";
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    const initialTheme = savedTheme || "dark";
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
-    setMounted(true);
+function readTheme(): Theme {
+  if (typeof document === "undefined") return "dark";
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function subscribe(callback: () => void) {
+  if (typeof document === "undefined") return () => {};
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  return () => observer.disconnect();
+}
+
+/**
+ * Inline script that runs before hydration so the correct theme is applied
+ * on first paint. Injected by the root layout.
+ */
+export const themeInitScript = `(function(){try{var s=localStorage.getItem("${STORAGE_KEY}");var m=window.matchMedia("(prefers-color-scheme: light)").matches;var t=s==="light"||s==="dark"?s:(m?"light":"dark");document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme="dark";}})();`;
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, readTheme, () => "dark" as Theme);
+
+  const setTheme = useCallback((next: Theme) => {
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // Storage may be unavailable (private mode); the attribute still works.
+    }
   }, []);
 
-  const applyTheme = (newTheme: Theme) => {
-    const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(newTheme);
-    
-    if (newTheme === "light") {
-      // Light mode - Warm, inviting, professional
-      root.style.setProperty("--background", "#fafafa");
-      root.style.setProperty("--foreground", "#18181b");
-      root.style.setProperty("--card", "#ffffff");
-      root.style.setProperty("--card-border", "#e4e4e7");
-      root.style.setProperty("--muted", "#71717a");
-      root.style.setProperty("--accent", "#0891b2");
-      root.style.setProperty("--shadow", "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)");
-      document.body.style.backgroundColor = "#fafafa";
-      document.body.style.color = "#18181b";
-    } else {
-      // Dark mode - Rich, immersive
-      root.style.setProperty("--background", "#09090b");
-      root.style.setProperty("--foreground", "#fafafa");
-      root.style.setProperty("--card", "#18181b");
-      root.style.setProperty("--card-border", "#27272a");
-      root.style.setProperty("--muted", "#a1a1aa");
-      root.style.setProperty("--accent", "#06b6d4");
-      root.style.setProperty("--shadow", "0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3)");
-      document.body.style.backgroundColor = "#09090b";
-      document.body.style.color = "#fafafa";
-    }
-  };
+  const toggleTheme = useCallback(() => {
+    setTheme(readTheme() === "dark" ? "light" : "dark");
+  }, [setTheme]);
 
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    applyTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

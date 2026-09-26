@@ -1,32 +1,16 @@
-"use client";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
-
-interface TextProps {
+type TextProps = {
   children: ReactNode;
   className?: string;
   muted?: boolean;
-  size?: "sm" | "base" | "lg" | "xl";
-}
+  size?: "sm" | "base" | "lg";
+  as?: "p" | "span" | "div";
+};
 
-export function Text({ children, className = "", muted = false, size = "base" }: TextProps) {
-  const sizes = {
-    sm: "text-sm",
-    base: "text-base",
-    lg: "text-lg",
-    xl: "text-xl",
-  };
+const sizes = { sm: "text-sm", base: "text-base", lg: "text-lg" };
 
-  return (
-    <motion.p
-      className={`${sizes[size]} ${muted ? "text-[var(--muted)]" : "text-[var(--foreground)]"} leading-relaxed ${className}`}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-    >
-      {children}
-    </motion.p>
-  );
+export function Text({ children, className, muted = true, size = "base", as: Tag = "p" }: TextProps) {
+  return <Tag className={cn(sizes[size], "leading-relaxed", muted ? "text-muted" : "text-fg", className)}>{children}</Tag>;
 }

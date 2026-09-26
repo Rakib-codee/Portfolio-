@@ -1,56 +1,66 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { SoundProvider } from "@/components/SoundProvider";
+import { Providers } from "@/components/Providers";
+import { themeInitScript } from "@/components/ThemeProvider";
+import { Footer } from "@/components/sections/Footer";
+import { Navbar } from "@/components/sections/Navbar";
+import { profile } from "@/content/profile";
+import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"], weight: ["500", "600", "700"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Rakib - Full Stack Developer",
-  description: "Professional portfolio showcasing projects, skills, and creative work. Specializing in Next.js, React, and modern web design.",
-  keywords: "Full Stack Developer, Frontend Engineer, UI/UX Designer, Next.js, React, TypeScript",
-  authors: [{ name: "Md Mahfujur Rahman Rakib" }],
-  openGraph: {
-    title: "Md Mahfujur Rahman Rakib - Portfolio",
-    description: "Modern portfolio website built with Next.js and Tailwind CSS",
-    type: "website",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${profile.name} · ${profile.role}`,
+    template: `%s · ${profile.shortName}`,
   },
+  description: siteDescription,
+  applicationName: siteName,
+  authors: [{ name: profile.name, url: siteUrl }],
+  creator: profile.name,
+  keywords: ["Software Engineering student", "Master's applicant", "researcher", "Next.js", "computer vision", "Zhengzhou University", profile.name],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: `${profile.name} · ${profile.role}`,
+    description: siteDescription,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${profile.name} · ${profile.role}`,
+    description: siteDescription,
+  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#050507" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f6fa" },
+  ],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body
-        suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased overflow-x-hidden`}
-        style={{ background: 'var(--background)', color: 'var(--foreground)' }}
-      >
-        {/* Skip to main content - Accessibility */}
-        <SoundProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </SoundProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} min-h-screen antialiased`}>
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

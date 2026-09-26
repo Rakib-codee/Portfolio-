@@ -1,26 +1,37 @@
 "use client";
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { useCallback, type ComponentPropsWithoutRef, type PointerEvent } from "react";
+import { cn } from "@/lib/utils";
 
-interface CardProps {
-  children: ReactNode;
-  className?: string;
-  hover?: boolean;
-}
+type CardProps = ComponentPropsWithoutRef<"div"> & {
+  /** Cursor-follow spotlight highlight. */
+  spotlight?: boolean;
+  /** Rotating neon border. Use sparingly. */
+  neon?: boolean;
+  padded?: boolean;
+};
 
-export function Card({ children, className = "", hover = true }: CardProps) {
+export function Card({ className, spotlight = true, neon = false, padded = true, children, ...rest }: CardProps) {
+  const onPointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    target.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+    target.style.setProperty("--my", `${event.clientY - rect.top}px`);
+  }, []);
+
   return (
-    <motion.div
-      className={`bg-[var(--card)] border border-[var(--card-border)] rounded-2xl p-6 transition-all duration-300 shadow-[var(--shadow)] ${
-        hover ? "hover:border-[var(--accent)]/50 hover:shadow-lg hover:shadow-[var(--accent)]/10" : ""
-      } ${className}`}
-      whileHover={
-        hover ? { y: -4, boxShadow: "0 20px 25px -5px rgba(6, 182, 212, 0.1)" } : {}
-      }
-      transition={{ duration: 0.3 }}
+    <div
+      onPointerMove={spotlight ? onPointerMove : undefined}
+      className={cn(
+        "glass rounded-3xl transition-[border-color,transform,box-shadow] duration-300 hover:border-border-strong",
+        spotlight && "spotlight",
+        neon && "neon-border",
+        padded && "p-6 sm:p-7",
+        className,
+      )}
+      {...rest}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
