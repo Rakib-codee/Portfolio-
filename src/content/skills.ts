@@ -1,12 +1,10 @@
 /**
  * Skills, grouped and honest.
  *
- * "proficient" = used in at least one shipped project listed on this site.
+ * "proficient" = used in at least one shipped project listed on this site
+ *                (verified against the project repositories).
  * "familiar"   = studied or used in coursework / small experiments, but no
  *                linked project demonstrates it yet.
- *
- * The split below is inferred from the tags of the projects in projects.ts.
- * TODO(PROFILE.md): confirm or adjust each level.
  */
 
 export type SkillLevel = "proficient" | "familiar";
@@ -24,6 +22,7 @@ export const skillGroups: SkillGroup[] = [
       { name: "Python", level: "proficient" },
       { name: "Java", level: "proficient" },
       { name: "SQL", level: "proficient" },
+      { name: "C", level: "proficient" },
       { name: "HTML & CSS", level: "proficient" },
     ],
   },
@@ -32,10 +31,22 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { name: "React", level: "proficient" },
       { name: "Next.js", level: "proficient" },
+      { name: "Vite", level: "proficient" },
       { name: "Tailwind CSS", level: "proficient" },
       { name: "Framer Motion", level: "proficient" },
       { name: "TanStack Query", level: "proficient" },
+      { name: "Recharts / Chart.js", level: "proficient" },
+      { name: "Leaflet maps", level: "proficient" },
       { name: "Progressive Web Apps", level: "proficient" },
+    ],
+  },
+  {
+    title: "Mobile",
+    skills: [
+      { name: "Android (Java)", level: "proficient" },
+      { name: "MVVM + Room", level: "proficient" },
+      { name: "AMap / OSMDroid SDKs", level: "proficient" },
+      { name: "Material Design", level: "proficient" },
     ],
   },
   {
@@ -43,13 +54,14 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { name: "Node.js", level: "proficient" },
       { name: "Express.js", level: "proficient" },
-      { name: "Firebase", level: "proficient" },
+      { name: "Prisma", level: "proficient" },
       { name: "MySQL / JDBC", level: "proficient" },
       { name: "SQLite", level: "proficient" },
+      { name: "Firebase", level: "proficient" },
+      { name: "JWT auth", level: "proficient" },
       { name: "Stripe", level: "proficient" },
       { name: "PostgreSQL", level: "familiar" },
       { name: "MongoDB", level: "familiar" },
-      { name: "Prisma", level: "familiar" },
       { name: "Supabase", level: "familiar" },
       { name: "Spring Boot", level: "familiar" },
       { name: "Django", level: "familiar" },
@@ -60,12 +72,13 @@ export const skillGroups: SkillGroup[] = [
   {
     title: "AI, Vision & Tooling",
     skills: [
+      { name: "OpenAI API integration", level: "proficient" },
       { name: "OpenCV", level: "proficient" },
       { name: "face_recognition (dlib)", level: "proficient" },
       { name: "Streamlit", level: "proficient" },
+      { name: "Docker", level: "proficient" },
       { name: "Git & GitHub", level: "proficient" },
       { name: "Vercel", level: "proficient" },
-      { name: "Docker", level: "familiar" },
       { name: "Figma", level: "familiar" },
     ],
   },

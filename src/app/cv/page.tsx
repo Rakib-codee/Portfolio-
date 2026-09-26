@@ -39,7 +39,7 @@ function Row({ left, right, sub }: { left: string; right?: string; sub?: React.R
 }
 
 export default function CvPage() {
-  const proficient = skillGroups.map((g) => ({ title: g.title, items: g.skills.filter((s) => s.level === "proficient").map((s) => s.name) }));
+  const proficient = skillGroups.map((g) => ({ title: g.title, items: g.skills.filter((s) => s.level === "proficient").map((s) => s.name) })).filter((g) => g.items.length > 0);
   const familiar = skillGroups.flatMap((g) => g.skills.filter((s) => s.level === "familiar").map((s) => s.name));
 
   return (
@@ -80,6 +80,7 @@ export default function CvPage() {
           </li>
           {profile.location && <li>{profile.location}</li>}
         </ul>
+        {profile.mastersPlan && <p className="mt-3 text-sm text-fg">{profile.mastersPlan}</p>}
         {!profile.location && (
           <div className="no-print mt-3">
             <Todo compact>City and country for the CV header.</Todo>
@@ -95,6 +96,12 @@ export default function CvPage() {
             </p>
             {edu.summary && <p>{edu.summary}</p>}
             {edu.gpa && <p className="text-fg">{edu.gpa}</p>}
+            {edu.coursework.length > 0 && (
+              <p>
+                <span className="font-semibold text-fg">Relevant coursework: </span>
+                {edu.coursework.join(", ")}
+              </p>
+            )}
             {edu.highlights.length > 0 && (
               <ul className="mt-1 list-disc pl-5">
                 {edu.highlights.map((h) => (
@@ -102,25 +109,29 @@ export default function CvPage() {
                 ))}
               </ul>
             )}
-            {!edu.gpa && (
-              <div className="no-print mt-2">
-                <Todo compact>GPA, thesis title, relevant coursework.</Todo>
-              </div>
-            )}
           </>} />
         ))}
       </CvSection>
 
+      {profile.researchInterests.length > 0 && (
+        <CvSection title="Research interests">
+          <p className="text-muted">{profile.researchInterests.join(" · ")}</p>
+        </CvSection>
+      )}
+
       <CvSection title="Research & publications">
         {publications.length === 0 ? (
           <div className="no-print">
-            <Todo>Publications are missing. Status will print exactly as written in research.ts.</Todo>
+            <Todo>Publications are missing.</Todo>
           </div>
         ) : (
           publications.map((pub) => (
             <Row key={pub.title} left={pub.title} right={`${pub.year} · ${pub.status}`} sub={<>
               <p>{pub.authors}</p>
-              <p>{pub.venue}</p>
+              <p>
+                {pub.venue}
+                {pub.kind ? ` · ${pub.kind}` : ""}
+              </p>
               {(pub.url || pub.pdf) && (
                 <p>
                   {pub.url && (
@@ -145,6 +156,7 @@ export default function CvPage() {
         {projects.map((project) => (
           <Row key={project.slug} left={project.title} right={project.period ?? undefined} sub={<>
             <p>{project.tagline}</p>
+            {project.caseStudy.role && <p className="text-xs">{project.caseStudy.role}</p>}
             <p className="font-mono text-xs text-muted-2">{project.tags.join(" · ")}</p>
             {(project.links.github || project.links.demo) && (
               <p className="text-xs">
@@ -180,22 +192,18 @@ export default function CvPage() {
         )}
       </CvSection>
 
-      <CvSection title="Leadership & activities">
+      <CvSection title="Honours, leadership & activities">
         {activities.length === 0 ? (
           <div className="no-print">
-            <Todo>Leadership roles, Nexgendev, content and competitions are missing.</Todo>
+            <Todo>Leadership roles and competitions are missing.</Todo>
           </div>
         ) : (
           activities.map((a) => <Row key={`${a.title}-${a.period}`} left={a.title} right={a.period} sub={<><p>{a.organisation}</p><p>{a.description}</p></>} />)
         )}
       </CvSection>
 
-      <CvSection title="Languages & tests">
-        {profile.languages.length === 0 ? (
-          <div className="no-print">
-            <Todo>Languages and test scores are missing.</Todo>
-          </div>
-        ) : (
+      {profile.languages.length > 0 && (
+        <CvSection title="Languages & tests">
           <ul className="space-y-1">
             {profile.languages.map((l) => (
               <li key={l.label}>
@@ -203,8 +211,8 @@ export default function CvPage() {
               </li>
             ))}
           </ul>
-        )}
-      </CvSection>
+        </CvSection>
+      )}
 
       <p className="pt-6 text-xs text-muted-2">
         Generated from the same content as {siteUrl.replace("https://", "")}. Last built {new Date().toLocaleDateString("en-GB", { year: "numeric", month: "long" })}.
