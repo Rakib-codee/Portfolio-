@@ -1,65 +1,42 @@
-"use client";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { Heading } from "./Heading";
+import { Reveal } from "@/components/effects/Reveal";
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
-
-interface SectionProps {
+type SectionProps = {
+  id: string;
   children: ReactNode;
   className?: string;
-  id?: string;
-  spacing?: "sm" | "md" | "lg" | "none";
-  divider?: boolean;
-  dividerPosition?: "top" | "bottom" | "both";
-}
-
-const spacingClasses = {
-  sm: "py-12",
-  md: "py-24",
-  lg: "py-32",
-  none: "py-0",
+  eyebrow?: string;
+  title?: string;
+  description?: ReactNode;
+  /** Numbering shown next to the eyebrow, e.g. "01". */
+  index?: string;
 };
 
-function SectionDivider({ position = "top" }: { position?: "top" | "bottom" }) {
+export function Section({ id, children, className, eyebrow, title, description, index }: SectionProps) {
   return (
-    <div className={`absolute left-0 right-0 ${position === "top" ? "-top-4" : "-bottom-4"} z-10`}>
-      <div className="max-w-4xl mx-auto px-8">
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-        <div className={`flex justify-center ${position === "top" ? "-mt-3" : "-mt-3"}`}>
-          <div className="w-6 h-6 rotate-45 border border-cyan-500/30 bg-[var(--background)]" />
-        </div>
+    <section id={id} className={cn("relative scroll-mt-24 py-20 sm:py-28", className)} aria-labelledby={title ? `${id}-title` : undefined}>
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        {(eyebrow || title) && (
+          <Reveal className="mb-10 max-w-3xl sm:mb-14">
+            {eyebrow && (
+              <p className="mb-3 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+                {index && <span className="text-muted-2">{index}</span>}
+                <span className="h-px w-8 bg-accent/60" aria-hidden />
+                {eyebrow}
+              </p>
+            )}
+            {title && (
+              <Heading level={2} id={`${id}-title`}>
+                {title}
+              </Heading>
+            )}
+            {description && <div className="mt-4 text-base text-muted sm:text-lg">{description}</div>}
+          </Reveal>
+        )}
+        {children}
       </div>
-    </div>
-  );
-}
-
-export function Section({ 
-  children, 
-  className = "", 
-  id,
-  spacing = "md",
-  divider = false,
-  dividerPosition = "top"
-}: SectionProps) {
-  return (
-    <motion.section
-      id={id}
-      className={`relative min-h-screen ${spacingClasses[spacing]} px-4 sm:px-8 md:px-16 flex items-center justify-center ${className}`}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true, margin: "-100px" }}
-    >
-      {/* Top Divider */}
-      {divider && (dividerPosition === "top" || dividerPosition === "both") && (
-        <SectionDivider position="top" />
-      )}
-      
-      <div className="w-full max-w-6xl">{children}</div>
-      
-      {/* Bottom Divider */}
-      {divider && (dividerPosition === "bottom" || dividerPosition === "both") && (
-        <SectionDivider position="bottom" />
-      )}
-    </motion.section>
+    </section>
   );
 }
