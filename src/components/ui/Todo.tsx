@@ -1,11 +1,16 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+/** True when placeholders should be visible (development only). */
+export const showTodos = process.env.NODE_ENV !== "production";
+
 /**
- * Visible, unmistakable placeholder for content that must come from PROFILE.md.
- * Rendered wherever a fact is missing so nothing is silently invented.
+ * Visible, unmistakable placeholder for content that is still missing.
+ * Rendered in development so nothing is silently invented; omitted from
+ * production builds so visitors never see it.
  */
 export function Todo({ children, className, compact = false }: { children: ReactNode; className?: string; compact?: boolean }) {
+  if (!showTodos) return null;
   return (
     <div
       role="note"

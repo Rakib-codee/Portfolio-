@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { RevealGroup, RevealItem } from "@/components/effects/Reveal";
 import { Badge, Card, Heading, Section } from "@/components/ui";
 import { ArrowUpRight, External, GitHub } from "@/components/ui/Icons";
+import { ProjectImage } from "@/components/ui/ProjectImage";
 import { categoryLabels, featuredProjects, otherProjects, type Project } from "@/content/projects";
 import { scaleIn } from "@/lib/variants";
 import { cn } from "@/lib/utils";
@@ -30,12 +30,12 @@ function FeaturedCard({ project, flagship = false }: { project: Project; flagshi
   return (
     <Card padded={false} neon={flagship} className={cn("group relative flex h-full flex-col overflow-hidden", flagship && "md:col-span-2")}>
       <div className={cn("relative w-full overflow-hidden", flagship ? "aspect-[16/8]" : "aspect-[16/10]")}>
-        <Image
+        <ProjectImage
           src={project.image}
           alt={project.imageAlt}
-          fill
+          title={project.title}
           sizes={flagship ? "(max-width: 768px) 100vw, 1152px" : "(max-width: 768px) 100vw, 576px"}
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className="transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/20 to-transparent" aria-hidden />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
@@ -75,7 +75,7 @@ export function Projects() {
     <Section id="projects" index="03" eyebrow="Featured projects" title="Systems I have shipped." description="Four projects with public code or a live deployment, flagship first. Each one has a full case study.">
       <RevealGroup className="grid gap-5 md:grid-cols-2">
         {featuredProjects.map((project, i) => (
-          <RevealItem key={project.slug} variants={scaleIn} className={cn(i === 0 && "md:col-span-2")}>
+          <RevealItem key={project.slug} variants={scaleIn} className={cn("min-w-0", i === 0 && "md:col-span-2")}>
             <FeaturedCard project={project} flagship={i === 0} />
           </RevealItem>
         ))}
@@ -84,12 +84,12 @@ export function Projects() {
       {otherProjects.length > 0 && (
         <div className="mt-10">
           <p className="mb-4 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-2">More work</p>
-          <RevealGroup className="grid gap-3 sm:grid-cols-2">
+          <RevealGroup className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {otherProjects.map((project) => (
               <RevealItem key={project.slug} className="min-w-0">
                 <Card className="group relative flex min-w-0 items-center gap-4 !p-4">
                   <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
-                    <Image src={project.image} alt={project.imageAlt} fill sizes="80px" className="object-cover" />
+                    <ProjectImage src={project.image} alt={project.imageAlt} title={project.title} sizes="80px" className="[&>span]:text-xl" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <Link href={`/projects/${project.slug}`} className="font-display text-base font-semibold text-fg after:absolute after:inset-0 after:content-['']">

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Reveal } from "@/components/effects/Reveal";
 import { Badge, Button, Card, Heading, Todo } from "@/components/ui";
 import { ArrowRight, External, GitHub } from "@/components/ui/Icons";
+import { ProjectImage } from "@/components/ui/ProjectImage";
 import { categoryLabels, getProject, projects } from "@/content/projects";
 
 type Params = { slug: string };
@@ -17,14 +18,25 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
+  const images = project.image ? [project.image] : undefined;
   return {
     title: project.title,
     description: project.tagline,
     alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: { title: project.title, description: project.tagline, images: [project.image] },
-    twitter: { card: "summary_large_image", title: project.title, description: project.tagline, images: [project.image] },
+    openGraph: { title: project.title, description: project.tagline, images },
+    twitter: { card: "summary_large_image", title: project.title, description: project.tagline, images },
   };
 }
+
+const sections = [
+  { id: "problem", label: "Problem" },
+  { id: "role", label: "My role" },
+  { id: "architecture", label: "Architecture" },
+  { id: "decisions", label: "Key decisions" },
+  { id: "results", label: "Results" },
+  { id: "links", label: "Links" },
+  { id: "learned", label: "What I learned" },
+] as const;
 
 function Block({ id, step, title, children }: { id: string; step: string; title: string; children: React.ReactNode }) {
   return (
@@ -48,6 +60,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const cs = project.caseStudy;
   const index = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(index + 1) % projects.length];
+  const hasLinks = Boolean(project.links.github || project.links.demo);
 
   return (
     <main id="main" className="pb-24 pt-28 sm:pt-32">
@@ -64,25 +77,26 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             {project.title}
           </Heading>
           <p className="mt-4 max-w-3xl text-lg text-muted sm:text-xl">{project.tagline}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            {project.links.github && (
-              <Button href={project.links.github} variant="secondary">
-                <GitHub size={16} /> Source code
-              </Button>
-            )}
-            {project.links.demo && (
-              <Button href={project.links.demo}>
-                <External size={16} /> Live demo
-              </Button>
-            )}
-            {!project.links.github && !project.links.demo && <Todo compact>Public repository or demo link, if one exists.</Todo>}
-          </div>
+          {hasLinks && (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {project.links.github && (
+                <Button href={project.links.github} variant="secondary">
+                  <GitHub size={16} /> Source code
+                </Button>
+              )}
+              {project.links.demo && (
+                <Button href={project.links.demo}>
+                  <External size={16} /> Live demo
+                </Button>
+              )}
+            </div>
+          )}
         </Reveal>
 
         <Reveal className="mt-10">
           <div className="glass neon-border relative aspect-[16/8] overflow-hidden rounded-[2rem] p-2">
             <div className="relative h-full w-full overflow-hidden rounded-[1.6rem]">
-              <Image src={project.image} alt={project.imageAlt} fill priority sizes="(max-width: 1152px) 100vw, 1152px" className="object-cover" />
+              <ProjectImage src={project.image} alt={project.imageAlt} title={project.title} priority sizes="(max-width: 1152px) 100vw, 1152px" />
             </div>
           </div>
         </Reveal>
@@ -145,7 +159,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             </Block>
 
             <Block id="links" step="06" title="Links">
-              {project.links.github || project.links.demo ? (
+              {hasLinks ? (
                 <ul className="space-y-2">
                   {project.links.github && (
                     <li>
@@ -163,7 +177,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                   )}
                 </ul>
               ) : (
-                <Todo>No public link yet.</Todo>
+                <p>This project does not have a public repository or demo.</p>
               )}
             </Block>
 
@@ -187,11 +201,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
               <div>
                 <p className="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-muted-2">Sections</p>
                 <ol className="space-y-1.5">
-                  {["problem", "role", "architecture", "decisions", "results", "links", "learned"].map((id, i) => (
-                    <li key={id}>
-                      <a href={`#${id}`} className="flex gap-2 text-muted transition-colors hover:text-fg">
+                  {sections.map((s, i) => (
+                    <li key={s.id}>
+                      <a href={`#${s.id}`} className="flex gap-2 text-muted transition-colors hover:text-fg">
                         <span className="font-mono text-[0.68rem] text-muted-2">0{i + 1}</span>
-                        <span className="capitalize">{id === "role" ? "My role" : id === "learned" ? "What I learned" : id === "decisions" ? "Key decisions" : id}</span>
+                        <span>{s.label}</span>
                       </a>
                     </li>
                   ))}

@@ -1,24 +1,29 @@
 import { RevealGroup, RevealItem } from "@/components/effects/Reveal";
 import { Badge, Card, Heading, Section, Todo } from "@/components/ui";
 import { External, FileText } from "@/components/ui/Icons";
-import { publications, type PublicationStatus } from "@/content/research";
+import { publications, type KnownStatus } from "@/content/research";
 
-const statusVariant: Record<PublicationStatus, "success" | "accent" | "warning" | "neutral" | "outline"> = {
+type Variant = "success" | "accent" | "warning" | "neutral" | "outline";
+
+const statusVariant: Record<KnownStatus, Variant> = {
   Published: "success",
   Accepted: "success",
   "Under review": "warning",
+  "Technical check passed": "warning",
   Preprint: "accent",
   "In preparation": "neutral",
 };
+
+function variantFor(status: string): Variant {
+  return statusVariant[status as KnownStatus] ?? "neutral";
+}
 
 export function Research() {
   return (
     <Section id="research" index="02" eyebrow="Research & publications" title="Work under review and in progress." description="Status is shown exactly as it stands. Nothing here is marked published unless it is.">
       {publications.length === 0 ? (
         <Card className="max-w-3xl" spotlight={false}>
-          <Todo>
-            No publications are recorded yet. Add each paper to <code className="font-mono text-fg">src/content/research.ts</code> with its title, authors, venue, year and exact status (for example &ldquo;Under review&rdquo;). Cards with status badges and PDF / DOI links render automatically.
-          </Todo>
+          <Todo>No publications recorded yet.</Todo>
         </Card>
       ) : (
         <RevealGroup className="grid gap-4 lg:grid-cols-2">
@@ -26,7 +31,8 @@ export function Research() {
             <RevealItem key={pub.title}>
               <Card className="h-full">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
-                  <Badge variant={statusVariant[pub.status]}>{pub.status}</Badge>
+                  <Badge variant={variantFor(pub.status)}>{pub.status}</Badge>
+                  {pub.kind && <Badge variant="outline">{pub.kind}</Badge>}
                   <span className="font-mono text-xs text-muted-2">{pub.year}</span>
                 </div>
                 <Heading level={3} className="text-lg sm:text-xl">
