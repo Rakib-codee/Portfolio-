@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GitHub, LinkedIn, Mail } from "@/components/ui/Icons";
+import { Logo } from "@/components/ui/Logo";
 import { profile } from "@/content/profile";
 import { navItems } from "@/lib/site";
 
@@ -10,6 +11,7 @@ export function Footer() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" aria-hidden />
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
+          <Logo size={48} className="mb-4" />
           <p className="font-display text-xl font-bold tracking-tight">{profile.name}</p>
           <p className="mt-2 max-w-sm text-sm text-muted">{profile.role}</p>
           <ul className="mt-5 flex gap-2" aria-label="Profiles">
