@@ -111,6 +111,12 @@ body {
   font-family: var(--font-display);
 }
 
+/* Theme-specific logo variants (see components/ui/Logo.tsx) */
+html[data-theme="light"] .logo-dark,
+html:not([data-theme="light"]) .logo-light {
+  display: none;
+}
+
 /* ------------------------------------------------------------------
    Surfaces and effects
    ------------------------------------------------------------------ */

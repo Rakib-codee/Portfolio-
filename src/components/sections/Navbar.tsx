@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useCommandPalette } from "@/components/effects/CommandPalette";
 import { Close, CommandKey, FileText, Menu, Moon, Sun } from "@/components/ui/Icons";
+import { Logo } from "@/components/ui/Logo";
 import { profile } from "@/content/profile";
 import { navItems } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -75,11 +76,8 @@ export function Navbar() {
             scrolled || open ? "glass border-border shadow-[0_10px_40px_-20px_rgba(0,0,0,0.6)]" : "border-transparent bg-transparent",
           )}
         >
-          <Link href="/" className="group flex items-center gap-2.5 rounded-full px-3 py-1.5" aria-label={`${profile.name}, home`}>
-            <span className="relative grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-accent font-display text-sm font-bold text-accent-fg">
-              MR
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 group-hover:translate-x-full" aria-hidden />
-            </span>
+          <Link href="/" className="group flex items-center gap-2.5 rounded-full px-2.5 py-1.5" aria-label={`${profile.name}, home`}>
+            <Logo size={36} priority className="transition-transform duration-300 group-hover:scale-110" />
             <span className="hidden font-display text-sm font-semibold tracking-tight sm:block">{profile.shortName}</span>
           </Link>
 
