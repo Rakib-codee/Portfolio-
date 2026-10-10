@@ -24,21 +24,22 @@ export type Publication = {
 
 export const publications: Publication[] = [
   {
-    title: "How Your Video Gets to You: A Tour of Internet Streaming, From Pixels to Playback",
-    authors: "Md Mahfujur Rahman Rakib",
-    // Owner's note: venue as submitted; confirm before citing elsewhere.
-    venue: "Archives of Computational Methods in Engineering",
-    year: "2027",
-    status: "submission is in peer review",
-    kind: "Article",
-  },
-  {
     title:
       "Explainable Machine Learning for Compressive Strength Prediction of Geopolymer Concrete: A Systematic Review of Methods, Interpretability, and Research Gaps",
     authors: "Md Mahfujur Rahman Rakib, Ramisa Atiya Rahman",
+    venue: "Archives of Computational Methods in Engineering",
+    year: "2027",
+    status: "submission is in peer review",
+    kind: "Review article",
+  },
+  {
+    title: "How Your Video Gets to You: A Tour of Internet Streaming, From Pixels to Playback",
+    authors: "Md Mahfujur Rahman Rakib",
+    // Owner's note: venue as submitted; confirm before citing elsewhere.
     venue: "IEEE Potentials",
     year: "2027",
     status: "Under review",
-    kind: "Review article",
+    kind: "Article",
   },
+  
 ];
