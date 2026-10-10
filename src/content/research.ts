@@ -29,7 +29,7 @@ export const publications: Publication[] = [
     // Owner's note: venue as submitted; confirm before citing elsewhere.
     venue: "Archives of Computational Methods in Engineering",
     year: "2027",
-    status: "Technical check passed",
+    status: "submission is in peer review",
     kind: "Article",
   },
   {
