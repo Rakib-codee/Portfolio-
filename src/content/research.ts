@@ -27,7 +27,7 @@ export const publications: Publication[] = [
     title:
       "Explainable Machine Learning for Compressive Strength Prediction of Geopolymer Concrete: A Systematic Review of Methods, Interpretability, and Research Gaps",
     authors: "Md Mahfujur Rahman Rakib, Ramisa Atiya Rahman",
-    venue: "Archives of Computational Methods in Engineering",
+    venue: "Archives of Computational Methods in Engineering(Springer-Q1) ",
     year: "2027",
     status: "submission is in peer review",
     kind: "Review article",
